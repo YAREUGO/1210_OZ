@@ -57,16 +57,17 @@ function formatNumber(num: number): string {
 
 /**
  * 차트 색상 팔레트 (다양한 색상)
+ * CSS 변수 대신 실제 색상 값을 사용 (recharts 호환성)
  */
 const CHART_COLORS = [
-  "hsl(var(--chart-1))",
-  "hsl(var(--chart-2))",
-  "hsl(var(--chart-3))",
-  "hsl(var(--chart-4))",
-  "hsl(var(--chart-5))",
-  "hsl(var(--primary))",
-  "hsl(var(--secondary))",
-  "hsl(var(--accent))",
+  "#f59e0b", // chart-1 (주황색)
+  "#3b82f6", // chart-2 (파란색)
+  "#8b5cf6", // chart-3 (보라색)
+  "#10b981", // chart-4 (초록색)
+  "#ef4444", // chart-5 (빨간색)
+  "#06b6d4", // cyan
+  "#f97316", // orange
+  "#ec4899", // pink
 ];
 
 /**

@@ -21,7 +21,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts";
+import { Bar, BarChart, CartesianGrid, XAxis, YAxis, Rectangle } from "recharts";
 import {
   ChartContainer,
   ChartTooltip,
@@ -58,6 +58,23 @@ function formatNumber(num: number): string {
 }
 
 /**
+ * 차트 색상 팔레트 (다양한 색상)
+ * CSS 변수 대신 실제 색상 값을 사용 (recharts 호환성)
+ */
+const CHART_COLORS = [
+  "#f59e0b", // chart-1 (주황색)
+  "#3b82f6", // chart-2 (파란색)
+  "#8b5cf6", // chart-3 (보라색)
+  "#10b981", // chart-4 (초록색)
+  "#ef4444", // chart-5 (빨간색)
+  "#06b6d4", // cyan
+  "#f97316", // orange
+  "#ec4899", // pink
+  "#6366f1", // indigo
+  "#14b8a6", // teal
+];
+
+/**
  * 지역별 분포 차트 컴포넌트
  */
 export function RegionChart({
@@ -77,20 +94,25 @@ export function RegionChart({
     );
   }
 
-  // 상위 N개 지역만 표시
-  const chartData = data.slice(0, limit).map((region) => ({
+  // 상위 N개 지역만 표시 (각 바마다 다른 색상 적용)
+  const chartData = data.slice(0, limit).map((region, index) => ({
     name: region.areaName,
     count: region.count,
     areaCode: region.areaCode,
+    fill: CHART_COLORS[index % CHART_COLORS.length],
   }));
 
-  // 차트 설정
-  const chartConfig = {
-    count: {
-      label: "관광지 개수",
-      color: "hsl(var(--chart-1))",
+  // 차트 설정 (각 지역마다 색상 매핑)
+  const chartConfig = chartData.reduce(
+    (acc, item, index) => {
+      acc[item.areaCode] = {
+        label: item.name,
+        color: CHART_COLORS[index % CHART_COLORS.length],
+      };
+      return acc;
     },
-  };
+    {} as Record<string, { label: string; color: string }>
+  );
 
   // 바 클릭 핸들러 (해당 지역 목록 페이지로 이동)
   const handleBarClick = (data: { areaCode: string } | undefined) => {
@@ -141,10 +163,21 @@ export function RegionChart({
           />
           <Bar
             dataKey="count"
-            fill="var(--color-count)"
             radius={[4, 4, 0, 0]}
             onClick={(data) => handleBarClick(data)}
             style={{ cursor: "pointer" }}
+            shape={(props: any) => {
+              const { payload, fill, ...rest } = props;
+              // payload에서 fill 속성을 가져오거나, 기본 색상 사용
+              const fillColor = payload.fill || fill || CHART_COLORS[0];
+              return (
+                <Rectangle
+                  {...rest}
+                  fill={fillColor}
+                  radius={[4, 4, 0, 0]}
+                />
+              );
+            }}
           />
         </BarChart>
       </ChartContainer>
