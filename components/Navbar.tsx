@@ -21,6 +21,7 @@ import React, { Suspense } from "react";
 import { Button } from "@/components/ui/button";
 import { Home, BarChart3, Bookmark } from "lucide-react";
 import { TourSearch } from "@/components/tour-search";
+import { ThemeToggle } from "@/components/theme-toggle";
 
 const Navbar = () => {
   return (
@@ -28,7 +29,10 @@ const Navbar = () => {
       <div className="container flex h-16 items-center justify-between px-4 max-w-7xl mx-auto">
         {/* 로고 및 브랜드 */}
         <div className="flex items-center gap-6">
-          <Link href="/" className="flex items-center gap-2 text-2xl font-bold hover:opacity-80 transition-opacity">
+          <Link
+            href="/"
+            className="flex items-center gap-2 text-2xl font-bold hover:opacity-80 transition-opacity"
+          >
             <span className="text-primary">My Trip</span>
           </Link>
 
@@ -62,10 +66,17 @@ const Navbar = () => {
         <div className="flex items-center gap-4">
           {/* 검색창 - useSearchParams 사용으로 Suspense 필요 */}
           <div className="hidden lg:block">
-            <Suspense fallback={<div className="w-64 h-10 bg-muted animate-pulse rounded" />}>
+            <Suspense
+              fallback={
+                <div className="w-64 h-10 bg-muted animate-pulse rounded" />
+              }
+            >
               <TourSearch variant="navbar" />
             </Suspense>
           </div>
+
+          {/* 테마 토글 */}
+          <ThemeToggle />
 
           {/* 로그인/회원가입 버튼 */}
           <SignedOut>

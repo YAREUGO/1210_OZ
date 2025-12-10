@@ -20,7 +20,13 @@
 
 import { notFound } from "next/navigation";
 import dynamic from "next/dynamic";
-import { getDetailCommon, getDetailIntro, getDetailImage } from "@/lib/api/tour-api";
+import Link from "next/link";
+import { ArrowLeft } from "lucide-react";
+import {
+  getDetailCommon,
+  getDetailIntro,
+  getDetailImage,
+} from "@/lib/api/tour-api";
 import { TourApiNotFoundError } from "@/lib/api/tour-api";
 import { DetailInfo } from "@/components/tour-detail/detail-info";
 import { DetailIntro } from "@/components/tour-detail/detail-intro";
@@ -32,7 +38,10 @@ import { Button } from "@/components/ui/button";
 // 지도 컴포넌트를 동적 임포트로 로드 (번들 크기 최적화)
 // DetailMap은 이미 "use client"로 되어 있어 클라이언트에서만 렌더링됨
 const DetailMap = dynamic(
-  () => import("@/components/tour-detail/detail-map").then((mod) => ({ default: mod.DetailMap })),
+  () =>
+    import("@/components/tour-detail/detail-map").then((mod) => ({
+      default: mod.DetailMap,
+    })),
   {
     loading: () => (
       <div className="h-[400px] flex items-center justify-center text-muted-foreground rounded-lg border bg-muted">
@@ -40,10 +49,17 @@ const DetailMap = dynamic(
       </div>
     ),
     ssr: true, // Server Component에서는 ssr: true 필수 (컴포넌트 내부에서 클라이언트 렌더링)
-  }
+  },
 );
-import { ArrowLeft } from "lucide-react";
-import Link from "next/link";
+
+// Pet tour info component (dynamic import)
+const DetailPetTour = dynamic(
+  () =>
+    import("@/components/tour-detail/detail-pet-tour").then(
+      (mod) => mod.DetailPetTour,
+    ),
+  { ssr: false },
+);
 
 interface DetailPageProps {
   params: Promise<{
@@ -80,7 +96,9 @@ export async function generateMetadata({ params }: DetailPageProps) {
               },
             ]
           : [],
-        url: `https://${process.env.VERCEL_URL || "localhost:3000"}/places/${contentId}`,
+        url: `https://${
+          process.env.VERCEL_URL || "localhost:3000"
+        }/places/${contentId}`,
         type: "website",
       },
       twitter: {
@@ -132,7 +150,8 @@ export default async function DetailPage({ params }: DetailPageProps) {
     if (err instanceof TourApiNotFoundError) {
       notFound();
     }
-    error = err instanceof Error ? err : new Error("알 수 없는 오류가 발생했습니다.");
+    error =
+      err instanceof Error ? err : new Error("알 수 없는 오류가 발생했습니다.");
   }
 
   if (!detail) {
@@ -152,7 +171,11 @@ export default async function DetailPage({ params }: DetailPageProps) {
               </Button>
             </Link>
             <div className="flex items-center gap-2">
-              <BookmarkButton contentId={detail.contentid} size="sm" showText={false} />
+              <BookmarkButton
+                contentId={detail.contentid}
+                size="sm"
+                showText={false}
+              />
               <ShareButton size="sm" showText={false} />
             </div>
           </div>
@@ -163,7 +186,9 @@ export default async function DetailPage({ params }: DetailPageProps) {
       <div className="container mx-auto px-4 py-8 max-w-4xl">
         {error ? (
           <div className="text-center py-12">
-            <p className="text-destructive mb-4">오류가 발생했습니다: {error.message}</p>
+            <p className="text-destructive mb-4">
+              오류가 발생했습니다: {error.message}
+            </p>
             <Link href="/">
               <Button>홈으로 돌아가기</Button>
             </Link>
@@ -172,6 +197,7 @@ export default async function DetailPage({ params }: DetailPageProps) {
           <div className="space-y-8">
             <DetailInfo detail={detail} />
             {intro && <DetailIntro intro={intro} />}
+            <DetailPetTour contentId={detail.contentid} />
             {images && images.length > 0 && (
               <DetailGallery
                 images={images}
@@ -186,4 +212,3 @@ export default async function DetailPage({ params }: DetailPageProps) {
     </main>
   );
 }
-
