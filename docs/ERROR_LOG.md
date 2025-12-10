@@ -44,5 +44,26 @@
   - Naver Maps API v3 (NCP) 문서
   - URL 파라미터: `ncpKeyId` 사용 (구 `ncpClientId` 아님)
 
+### detail-map.tsx 좌표 변환 함수 사용 오류
+- **발생 시점**: Phase 3 지도 섹션 구현 후 상세페이지 접속 시
+- **에러 내용**: `TypeError: object is not iterable (cannot read property Symbol(Symbol.iterator))`
+- **에러 위치**: 
+  - `components/tour-detail/detail-map.tsx:81:28`
+  - `components/tour-detail/detail-map.tsx:136:28`
+- **원인**: 
+  - `katecToWgs84()` 함수는 `{ lng: number, lat: number }` 객체를 반환하는데, 배열 구조 분해 `[lng, lat]`를 사용하여 에러 발생
+- **해결 방법**:
+  - 배열 구조 분해 `[lng, lat]`를 객체 구조 분해 `{ lng, lat }`로 변경
+- **수정된 코드**:
+  ```typescript
+  // ❌ 잘못된 코드
+  const [lng, lat] = katecToWgs84(mapx, mapy);
+  
+  // ✅ 올바른 코드
+  const { lng, lat } = katecToWgs84(mapx, mapy);
+  ```
+- **참고 자료**: 
+  - `lib/utils/coordinate.ts`: `katecToWgs84` 함수 정의 확인
+
 ---
 
