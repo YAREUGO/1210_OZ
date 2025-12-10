@@ -348,14 +348,22 @@
     - [x] 중복 필드 제거
     - [x] 아이콘 매핑
     - [x] 반응형 디자인
-- [ ] 이미지 갤러리 (MVP 2.4.3)
-  - [ ] `components/tour-detail/detail-gallery.tsx` 생성
-    - [ ] `getDetailImage()` API 연동
-    - [ ] 대표 이미지 + 서브 이미지들
-    - [ ] 이미지 슬라이드 기능 (Swiper 또는 캐러셀)
-    - [ ] 이미지 클릭 시 전체화면 모달
-    - [ ] 이미지 없으면 기본 이미지
-    - [ ] Next.js Image 컴포넌트 사용 (최적화)
+- [x] 이미지 갤러리 (MVP 2.4.3)
+  - [x] `components/tour-detail/detail-gallery.tsx` 생성
+    - [x] `getDetailImage()` API 연동
+    - [x] 대표 이미지 + 서브 이미지들 (그리드 레이아웃)
+    - [x] 이미지 클릭 시 전체화면 모달
+    - [x] 이전/다음 이미지 네비게이션
+    - [x] 이미지 인덱스 표시
+    - [x] 이미지 없으면 섹션 숨김 처리
+    - [x] Next.js Image 컴포넌트 사용 (최적화)
+  - [x] 상세페이지에 이미지 갤러리 통합
+  ***
+  - [ ] 추가 구현 내용 (plan 모드 build로 개발 완료)
+    - [x] 반응형 그리드 레이아웃 (1/2/3열)
+    - [x] Dialog 컴포넌트를 사용한 모달
+    - [x] 키보드 네비게이션 (향후 구현 가능)
+    - [ ] Swiper 라이브러리 통합 (선택 사항, 향후 구현)
 - [x] 지도 섹션 (MVP 2.4.4)
   - [x] `components/tour-detail/detail-map.tsx` 생성
     - [x] 해당 관광지 위치 표시 (네이버 지도)

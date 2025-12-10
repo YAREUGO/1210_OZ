@@ -86,10 +86,29 @@ export default async function DetailPage({ params }: DetailPageProps) {
   const { contentId } = await params;
 
   let detail;
+  let intro;
+  let images;
   let error: Error | null = null;
 
   try {
+    // 기본 정보 조회
     detail = await getDetailCommon(contentId);
+
+    // 운영 정보와 이미지는 병렬로 조회 (실패해도 계속 진행)
+    const [introResult, imagesResult] = await Promise.allSettled([
+      getDetailIntro(contentId, detail.contenttypeid).catch(() => null),
+      getDetailImage(contentId).catch(() => []),
+    ]);
+
+    if (introResult.status === "fulfilled") {
+      intro = introResult.value;
+    }
+
+    if (imagesResult.status === "fulfilled") {
+      images = imagesResult.value;
+    } else {
+      images = [];
+    }
   } catch (err) {
     console.error("상세 정보 조회 실패:", err);
     if (err instanceof TourApiNotFoundError) {
@@ -132,6 +151,13 @@ export default async function DetailPage({ params }: DetailPageProps) {
           <div className="space-y-8">
             <DetailInfo detail={detail} />
             {intro && <DetailIntro intro={intro} />}
+            {images && images.length > 0 && (
+              <DetailGallery
+                images={images}
+                firstImage={detail.firstimage}
+                title={detail.title}
+              />
+            )}
             <DetailMap detail={detail} />
           </div>
         )}
