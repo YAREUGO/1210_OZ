@@ -136,7 +136,10 @@ export default async function DetailPage({ params }: DetailPageProps) {
                 <span>목록으로</span>
               </Button>
             </Link>
-            <ShareButton size="sm" showText={false} />
+            <div className="flex items-center gap-2">
+              <BookmarkButton contentId={detail.contentid} size="sm" showText={false} />
+              <ShareButton size="sm" showText={false} />
+            </div>
           </div>
         </div>
       </div>
