@@ -71,4 +71,22 @@
 - **참고 자료**:
   - `lib/utils/coordinate.ts`: `katecToWgs84` 함수 정의 확인
 
+### 네이버 지도 API 인증 실패 오류
+- **발생 시점**: Phase 3 지도 섹션 구현 후 상세페이지 접속 시
+- **에러 내용**: `NAVER Maps JavaScript API v3 네이버 지도 Open API 인증이 실패하였습니다`
+- **에러 코드**: 200 / Authentication Failed
+- **원인**: 
+  1. `detail-map.tsx`에서 잘못된 파라미터 사용: `ncpClientId` 대신 `ncpKeyId` 사용해야 함
+  2. 네이버 클라우드 플랫폼에서 웹 서비스 URL에 `http://localhost:3000`이 등록되지 않음
+- **해결 방법**:
+  1. 코드 수정: `ncpClientId` → `ncpKeyId`로 변경 (완료)
+  2. 네이버 클라우드 플랫폼 설정:
+     - [네이버 클라우드 플랫폼 콘솔](https://console.ncloud.com) 접속
+     - AI·NAVER API > Maps > 내 애플리케이션 선택
+     - 웹 서비스 URL에 `http://localhost:3000` 추가
+     - 프로덕션 도메인도 별도로 등록 필요 (예: `https://yourdomain.com`)
+- **참고 자료**: 
+  - [네이버 지도 API 문서](https://navermaps.github.io/maps.js.ncp/docs/)
+  - URL 파라미터: `ncpKeyId` (v3 API)
+
 ---
