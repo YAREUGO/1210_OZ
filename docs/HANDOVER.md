@@ -408,12 +408,18 @@ NEXT_PUBLIC_STORAGE_BUCKET=uploads
    - 인증된 사용자만 접근 가능
 
 ### 최근 변경사항
+- 2025-12-10: 다크 모드 지원 및 반려동물 동반 정보 기능 추가
+  - 다크 모드 기능 추가 (ThemeProvider, ThemeToggle)
+  - 반려동물 동반 정보 컴포넌트 추가 (DetailPetTour)
+  - package-lock.json 제거 (pnpm 프로젝트 정리)
 - 2025-12-10: 배포 사이트 에러 수정 및 개선
   - 북마크 페이지 생성 (`app/bookmarks/page.tsx`) - 404 에러 해결
   - 전역 에러 바운더리 추가 (`app/error.tsx`) - Server Component 에러 처리
   - 홈페이지 에러 처리 개선 - 에러 발생 시 빈 배열로 초기화하여 렌더링 오류 방지
   - 네이버 지도 API 에러 처리 개선 - 스크립트 로드 실패 시 상세한 안내 메시지
   - 네이버 지도 API 설정 가이드 추가 (`docs/NAVER_MAP_SETUP.md`)
+  - Vercel 빌드 설정 수정 (vercel.json, packageManager 필드 추가)
+  - .env 파일 하나만 사용하도록 정리 (README.md 업데이트)
 - 2025-12-10: Phase 4 통계 대시보드 페이지 완료
   - 통계 요약, 지역별/타입별 차트 구현
   - 성능 최적화 (캐싱, 동적 임포트)
