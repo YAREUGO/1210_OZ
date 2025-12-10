@@ -16,9 +16,14 @@
  */
 
 /**
- * KATEC 좌표를 WGS84 좌표로 변환
- * @param mapx KATEC 경도 (정수형)
- * @param mapy KATEC 위도 (정수형)
+ * 한국관광공사 API 좌표를 WGS84 좌표로 변환
+ * 
+ * 한국관광공사 API의 mapx, mapy는 두 가지 형태로 제공될 수 있습니다:
+ * 1. 이미 WGS84 좌표 (예: "126.9857598", "37.5642135") - 그대로 사용
+ * 2. 정수형 좌표 (예: "1269857598", "375642135") - 10000000으로 나누어 변환
+ * 
+ * @param mapx API 경도 값
+ * @param mapy API 위도 값
  * @returns WGS84 좌표 { lng: 경도, lat: 위도 }
  */
 export function katecToWgs84(
@@ -28,10 +33,27 @@ export function katecToWgs84(
   const x = typeof mapx === "string" ? parseFloat(mapx) : mapx;
   const y = typeof mapy === "string" ? parseFloat(mapy) : mapy;
 
-  return {
-    lng: x / 10000000,
-    lat: y / 10000000,
-  };
+  // 좌표 범위 확인 (한국: 경도 124-132, 위도 33-43)
+  const isValidKoreaLng = x >= 124 && x <= 132;
+  const isValidKoreaLat = y >= 33 && y <= 43;
+
+  // 이미 유효한 WGS84 좌표인 경우 그대로 반환
+  if (isValidKoreaLng && isValidKoreaLat) {
+    return { lng: x, lat: y };
+  }
+
+  // 정수형 좌표인 경우 변환 (10000000으로 나눔)
+  const convertedLng = x / 10000000;
+  const convertedLat = y / 10000000;
+
+  // 변환 후에도 유효한지 확인
+  if (convertedLng >= 124 && convertedLng <= 132 && convertedLat >= 33 && convertedLat <= 43) {
+    return { lng: convertedLng, lat: convertedLat };
+  }
+
+  // 둘 다 아닌 경우 원본 값 그대로 반환 (에러 처리는 호출측에서)
+  console.warn("좌표 변환 경고: 유효하지 않은 좌표", { mapx, mapy, x, y });
+  return { lng: x, lat: y };
 }
 
 /**
