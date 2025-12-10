@@ -19,9 +19,12 @@
  */
 
 import { notFound } from "next/navigation";
-import { getDetailCommon } from "@/lib/api/tour-api";
+import { getDetailCommon, getDetailIntro, getDetailImage } from "@/lib/api/tour-api";
 import { TourApiNotFoundError } from "@/lib/api/tour-api";
 import { DetailInfo } from "@/components/tour-detail/detail-info";
+import { DetailIntro } from "@/components/tour-detail/detail-intro";
+import { DetailGallery } from "@/components/tour-detail/detail-gallery";
+import { DetailMap } from "@/components/tour-detail/detail-map";
 import { ShareButton } from "@/components/tour-detail/share-button";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
