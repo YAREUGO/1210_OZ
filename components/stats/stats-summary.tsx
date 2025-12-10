@@ -175,3 +175,45 @@ export function StatsSummary({ data, isLoading, className }: StatsSummaryProps) 
   );
 }
 
+/**
+ * 통계 요약 스켈레톤 컴포넌트
+ * 로딩 중일 때 표시되는 스켈레톤 UI
+ */
+export function StatsSummarySkeleton({ className }: { className?: string }) {
+  return (
+    <div className={cn("space-y-6", className)}>
+      {/* 전체 관광지 수 스켈레톤 */}
+      <div className="rounded-lg border bg-card p-6">
+        <Skeleton variant="text" width="w-32" height="h-4" className="mb-2" />
+        <Skeleton variant="text" width="w-24" height="h-8" />
+      </div>
+
+      {/* Top 3 지역 스켈레톤 */}
+      <div className="space-y-4">
+        <Skeleton variant="text" width="w-24" height="h-5" />
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {Array.from({ length: 3 }).map((_, i) => (
+            <div key={i} className="rounded-lg border bg-card p-4">
+              <Skeleton variant="text" width="w-16" height="h-4" className="mb-2" />
+              <Skeleton variant="text" width="w-20" height="h-6" />
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Top 3 타입 스켈레톤 */}
+      <div className="space-y-4">
+        <Skeleton variant="text" width="w-24" height="h-5" />
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {Array.from({ length: 3 }).map((_, i) => (
+            <div key={i} className="rounded-lg border bg-card p-4">
+              <Skeleton variant="text" width="w-16" height="h-4" className="mb-2" />
+              <Skeleton variant="text" width="w-20" height="h-6" />
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
