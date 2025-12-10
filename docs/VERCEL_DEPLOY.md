@@ -5,6 +5,7 @@
 ## 📋 사전 준비
 
 1. **GitHub 저장소 준비**
+
    - 코드가 GitHub에 푸시되어 있어야 합니다
    - Vercel은 GitHub 저장소와 연동하여 자동 배포합니다
 
@@ -43,6 +44,7 @@ NEXT_PUBLIC_CLERK_SIGN_UP_FALLBACK_REDIRECT_URL=/
 ```
 
 **값 확인 위치:**
+
 - Clerk Dashboard → **API Keys** 메뉴
 
 #### Supabase 데이터베이스 관련
@@ -55,6 +57,7 @@ NEXT_PUBLIC_STORAGE_BUCKET=uploads
 ```
 
 **값 확인 위치:**
+
 - Supabase Dashboard → **Settings** → **API** 메뉴
 - `NEXT_PUBLIC_SUPABASE_URL`: Project URL
 - `NEXT_PUBLIC_SUPABASE_ANON_KEY`: anon public key
@@ -69,6 +72,7 @@ NEXT_PUBLIC_TOUR_API_KEY=your-tour-api-key
 ```
 
 **값 확인 위치:**
+
 - [한국관광공사 공공데이터포털](https://www.data.go.kr/)
 - 회원가입 후 API 키 발급
 
@@ -79,10 +83,12 @@ NEXT_PUBLIC_NAVER_MAP_CLIENT_ID=your-naver-map-client-id
 ```
 
 **값 확인 위치:**
+
 - [네이버 클라우드 플랫폼](https://www.ncloud.com/)
 - Maps API 서비스 신청 후 Client ID 발급
 
 **⚠️ 중요**: 배포 후 반드시 네이버 클라우드 플랫폼에서 **웹 서비스 URL**을 등록해야 합니다!
+
 - Vercel 배포 URL: `https://1210oz.vercel.app` (또는 실제 배포 URL)
 - 자세한 설정 방법: [네이버 지도 API 설정 가이드](./NAVER_MAP_SETUP.md)
 
@@ -93,6 +99,7 @@ NEXT_PUBLIC_APP_URL=https://your-app.vercel.app
 ```
 
 **설명:**
+
 - 배포 후 Vercel이 자동으로 생성하는 도메인
 - 또는 커스텀 도메인 사용 시 해당 URL
 - Open Graph 메타데이터에 사용됨
@@ -106,6 +113,7 @@ Vercel에서는 환경별로 환경 변수를 다르게 설정할 수 있습니�
 - **Development**: 개발 환경
 
 각 환경에 맞는 값을 설정하세요. 예를 들어:
+
 - Production: 프로덕션 API 키
 - Preview/Development: 테스트 API 키
 
@@ -120,10 +128,12 @@ Vercel에서는 환경별로 환경 변수를 다르게 설정할 수 있습니�
 배포가 완료되면 다음을 확인하세요:
 
 1. **빌드 로그 확인**
+
    - Vercel Dashboard → **Deployments** → 배포 항목 클릭
    - 빌드 로그에서 에러가 없는지 확인
 
 2. **환경 변수 확인**
+
    - 배포된 사이트에서 환경 변수가 제대로 로드되었는지 확인
    - 브라우저 콘솔에서 에러가 없는지 확인
 
@@ -139,11 +149,13 @@ Vercel에서는 환경별로 환경 변수를 다르게 설정할 수 있습니�
 ### 빌드 실패
 
 **원인:**
+
 - 환경 변수 누락
 - 타입 에러
 - 의존성 설치 실패
 
 **해결:**
+
 1. 빌드 로그 확인
 2. 로컬에서 `pnpm build` 실행하여 에러 확인
 3. 환경 변수 재확인
@@ -151,11 +163,13 @@ Vercel에서는 환경별로 환경 변수를 다르게 설정할 수 있습니�
 ### 런타임 에러
 
 **원인:**
+
 - 환경 변수 값 오류
 - API 키 만료
 - CORS 문제
 
 **해결:**
+
 1. 브라우저 콘솔 확인
 2. 환경 변수 값 재확인
 3. API 키 유효성 확인
@@ -163,10 +177,12 @@ Vercel에서는 환경별로 환경 변수를 다르게 설정할 수 있습니�
 ### 지도가 표시되지 않음
 
 **원인:**
+
 - 네이버 지도 API 키 누락 또는 오류
 - 웹 서비스 URL 미등록
 
 **해결:**
+
 1. `NEXT_PUBLIC_NAVER_MAP_CLIENT_ID` 확인
 2. 네이버 클라우드 플랫폼에서 웹 서비스 URL 등록 확인
    - Vercel 도메인: `https://your-app.vercel.app`
@@ -188,4 +204,3 @@ Vercel에서는 환경별로 환경 변수를 다르게 설정할 수 있습니�
 - [Vercel 공식 문서](https://vercel.com/docs)
 - [Next.js 배포 가이드](https://nextjs.org/docs/deployment)
 - [환경 변수 설정 가이드](https://vercel.com/docs/concepts/projects/environment-variables)
-

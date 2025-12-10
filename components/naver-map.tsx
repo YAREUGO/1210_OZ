@@ -24,7 +24,11 @@
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import type { TourItem } from "@/lib/types/tour";
-import { katecToWgs84, getCenterPoint, getBounds } from "@/lib/utils/coordinate";
+import {
+  katecToWgs84,
+  getCenterPoint,
+  getBounds,
+} from "@/lib/utils/coordinate";
 import { getContentTypeName } from "@/lib/types/tour";
 import { Button } from "@/components/ui/button";
 import { ZoomIn, ZoomOut, Map, Satellite } from "lucide-react";
@@ -79,7 +83,7 @@ export function NaverMap({
   // Naver Maps API 스크립트 로드
   useEffect(() => {
     const scriptId = "naver-maps-script";
-    
+
     // 이미 로드되어 있으면 스킵
     if (document.getElementById(scriptId)) {
       if (window.naver) {
@@ -109,11 +113,11 @@ export function NaverMap({
       console.error("네이버 지도 API 스크립트 로드 실패:", error);
       console.warn(
         "💡 네이버 클라우드 플랫폼에서 웹 서비스 URL이 등록되었는지 확인하세요:",
-        window.location.origin
+        window.location.origin,
       );
       console.warn(
         "💡 네이버 클라우드 플랫폼 → Maps API → 웹 서비스 URL에 다음을 추가하세요:",
-        window.location.origin
+        window.location.origin,
       );
     };
     document.head.appendChild(script);
@@ -252,10 +256,10 @@ export function NaverMap({
       window.naver.maps.Event.addListener(marker, "click", () => {
         // 다른 인포윈도우 닫기
         infoWindowsRef.current.forEach((iw) => iw.close());
-        
+
         // 현재 인포윈도우 열기
         infoWindow.open(map, marker);
-        
+
         // 리스트 연동
         if (onTourSelect) {
           onTourSelect(tour.contentid);
@@ -264,7 +268,9 @@ export function NaverMap({
 
       // 상세보기 버튼 클릭 이벤트
       setTimeout(() => {
-        const detailBtn = document.getElementById(`detail-btn-${tour.contentid}`);
+        const detailBtn = document.getElementById(
+          `detail-btn-${tour.contentid}`,
+        );
         if (detailBtn) {
           detailBtn.addEventListener("click", () => {
             router.push(`/places/${tour.contentid}`);
@@ -282,15 +288,20 @@ export function NaverMap({
       if (selectedTour && selectedTour.mapx && selectedTour.mapy) {
         const coord = katecToWgs84(selectedTour.mapx, selectedTour.mapy);
         const position = new window.naver.maps.LatLng(coord.lat, coord.lng);
-        
+
         map.setCenter(position);
         map.setZoom(15);
 
         // 해당 마커의 인포윈도우 열기
-        const markerIndex = tours.findIndex((t) => t.contentid === selectedTourId);
+        const markerIndex = tours.findIndex(
+          (t) => t.contentid === selectedTourId,
+        );
         if (markerIndex >= 0 && infoWindowsRef.current[markerIndex]) {
           infoWindowsRef.current.forEach((iw) => iw.close());
-          infoWindowsRef.current[markerIndex].open(map, markersRef.current[markerIndex]);
+          infoWindowsRef.current[markerIndex].open(
+            map,
+            markersRef.current[markerIndex],
+          );
         }
       }
     }
@@ -299,14 +310,14 @@ export function NaverMap({
   // 지도 유형 변경
   const handleMapTypeChange = () => {
     if (!mapInstanceRef.current) return;
-    
+
     const newType = mapType === "normal" ? "satellite" : "normal";
     setMapType(newType);
-    
+
     mapInstanceRef.current.setMapTypeId(
       newType === "satellite"
         ? window.naver.maps.MapTypeId.SATELLITE
-        : window.naver.maps.MapTypeId.NORMAL
+        : window.naver.maps.MapTypeId.NORMAL,
     );
   };
 
@@ -370,7 +381,9 @@ export function NaverMap({
           size="icon"
           onClick={handleMapTypeChange}
           className="bg-white shadow-lg border"
-          aria-label={mapType === "normal" ? "위성 지도로 전환" : "일반 지도로 전환"}
+          aria-label={
+            mapType === "normal" ? "위성 지도로 전환" : "일반 지도로 전환"
+          }
         >
           {mapType === "normal" ? (
             <Satellite className="h-4 w-4" />
@@ -382,4 +395,3 @@ export function NaverMap({
     </div>
   );
 }
-
