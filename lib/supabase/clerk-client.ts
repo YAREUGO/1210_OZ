@@ -41,7 +41,21 @@ export function useClerkSupabaseClient() {
 
     return createClient(supabaseUrl, supabaseKey, {
       async accessToken() {
-        return session?.getToken() ?? null;
+        // SSR 환경에서는 토큰을 반환하지 않음
+        if (typeof window === "undefined") {
+          return null;
+        }
+
+        // session이 없거나 getToken이 함수가 아닌 경우 null 반환
+        if (!session || typeof session.getToken !== "function") {
+          return null;
+        }
+
+        try {
+          return await session.getToken();
+        } catch {
+          return null;
+        }
       },
     });
   }, [session]);
