@@ -131,6 +131,9 @@ export default async function HomePage({ searchParams }: HomePageProps) {
           tours={tours}
           isLoading={false}
           error={error}
+          totalCount={totalCount}
+          currentPage={page}
+          itemsPerPage={20}
           // 서버 컴포넌트에서는 onRetry를 전달하지 않음 (클라이언트 컴포넌트에서 처리)
         />
       </div>

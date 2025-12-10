@@ -18,6 +18,7 @@ import { List, Map as MapIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { TourList } from "@/components/tour-list";
 import { NaverMap } from "@/components/naver-map";
+import { Pagination } from "@/components/pagination";
 import type { TourItem } from "@/lib/types/tour";
 import { cn } from "@/lib/utils";
 
@@ -38,6 +39,18 @@ interface TourMapViewProps {
    * 에러 재시도 함수
    */
   onRetry?: () => void;
+  /**
+   * 전체 항목 수 (페이지네이션용)
+   */
+  totalCount?: number;
+  /**
+   * 현재 페이지 번호
+   */
+  currentPage?: number;
+  /**
+   * 페이지당 항목 수
+   */
+  itemsPerPage?: number;
 }
 
 type ViewMode = "list" | "map" | "split";
@@ -47,6 +60,9 @@ export function TourMapView({
   isLoading = false,
   error = null,
   onRetry,
+  totalCount = 0,
+  currentPage = 1,
+  itemsPerPage = 20,
 }: TourMapViewProps) {
   const [viewMode, setViewMode] = useState<ViewMode>("split");
   const [selectedTourId, setSelectedTourId] = useState<string | undefined>();
@@ -128,6 +144,17 @@ export function TourMapView({
           </div>
         )}
       </div>
+
+      {/* 페이지네이션 (리스트 뷰일 때만 표시) */}
+      {effectiveViewMode !== "map" && totalCount > 0 && (
+        <div className="mt-8 pb-8">
+          <Pagination
+            currentPage={currentPage}
+            totalCount={totalCount}
+            itemsPerPage={itemsPerPage}
+          />
+        </div>
+      )}
     </div>
   );
 }
