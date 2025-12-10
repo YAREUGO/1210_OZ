@@ -56,7 +56,7 @@ export function DetailMap({ detail, height = "400px", className }: DetailMapProp
     if (typeof window === "undefined" || !window.naver) {
       // 스크립트 동적 로드
       const script = document.createElement("script");
-      script.src = `https://oapi.map.naver.com/openapi/v3/maps.js?ncpClientId=${ncpKeyId}`;
+      script.src = `https://oapi.map.naver.com/openapi/v3/maps.js?ncpKeyId=${ncpKeyId}`;
       script.async = true;
       script.onload = () => {
         initializeMap();
