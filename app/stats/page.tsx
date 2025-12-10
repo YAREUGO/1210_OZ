@@ -17,8 +17,10 @@
  */
 
 import { Suspense } from "react";
-import { getStatsSummary } from "@/lib/api/stats-api";
+import { getStatsSummary, getRegionStats, getTypeStats } from "@/lib/api/stats-api";
 import { StatsSummary } from "@/components/stats/stats-summary";
+import { RegionChart } from "@/components/stats/region-chart";
+import { TypeChart } from "@/components/stats/type-chart";
 import { TourApiError } from "@/lib/api/tour-api";
 
 /**
@@ -33,11 +35,18 @@ export const metadata = {
  * 통계 데이터를 가져오는 Server Component
  */
 async function StatsContent() {
-  let data;
+  let summaryData;
+  let regionStats;
+  let typeStats;
   let error: Error | null = null;
 
   try {
-    data = await getStatsSummary();
+    // 병렬로 모든 통계 데이터 조회
+    [summaryData, regionStats, typeStats] = await Promise.all([
+      getStatsSummary(),
+      getRegionStats(),
+      getTypeStats(),
+    ]);
   } catch (err) {
     console.error("통계 데이터 조회 실패:", err);
     error = err instanceof Error ? err : new Error("알 수 없는 오류가 발생했습니다.");
@@ -70,7 +79,17 @@ async function StatsContent() {
         </p>
       </div>
 
-      <StatsSummary data={data} isLoading={false} />
+      <StatsSummary data={summaryData} isLoading={false} />
+
+      <div className="mt-12 space-y-12">
+        <div className="rounded-lg border bg-card p-6">
+          <RegionChart data={regionStats} isLoading={false} limit={10} />
+        </div>
+
+        <div className="rounded-lg border bg-card p-6">
+          <TypeChart data={typeStats} isLoading={false} />
+        </div>
+      </div>
     </div>
   );
 }
@@ -91,6 +110,14 @@ export default function StatsPage() {
               </p>
             </div>
             <StatsSummary isLoading={true} />
+            <div className="mt-12 space-y-12">
+              <div className="rounded-lg border bg-card p-6">
+                <RegionChart isLoading={true} />
+              </div>
+              <div className="rounded-lg border bg-card p-6">
+                <TypeChart isLoading={true} />
+              </div>
+            </div>
           </div>
         }
       >
