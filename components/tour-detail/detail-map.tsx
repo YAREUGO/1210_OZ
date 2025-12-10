@@ -82,11 +82,12 @@ export function DetailMap({ detail, height = "400px", className }: DetailMapProp
         }
 
         // 좌표 변환 (KATEC → WGS84)
-        const mapx = parseFloat(detail.mapx) / 10000000;
-        const mapy = parseFloat(detail.mapy) / 10000000;
+        // katecToWgs84 함수가 내부에서 10000000으로 나누므로 원본 값을 전달
+        const mapx = detail.mapx;
+        const mapy = detail.mapy;
         
         // 좌표가 유효한지 확인
-        if (isNaN(mapx) || isNaN(mapy)) {
+        if (!mapx || !mapy || isNaN(parseFloat(mapx)) || isNaN(parseFloat(mapy))) {
           setMapError("유효하지 않은 좌표입니다");
           return;
         }
@@ -145,9 +146,8 @@ export function DetailMap({ detail, height = "400px", className }: DetailMapProp
    * 길찾기 버튼 클릭 핸들러
    */
   const handleDirections = () => {
-    const mapx = parseFloat(detail.mapx) / 10000000;
-    const mapy = parseFloat(detail.mapy) / 10000000;
-    const { lng, lat } = katecToWgs84(mapx, mapy);
+    // katecToWgs84 함수가 내부에서 10000000으로 나누므로 원본 값을 전달
+    const { lng, lat } = katecToWgs84(detail.mapx, detail.mapy);
 
     // 네이버 지도 길찾기 URL
     const directionsUrl = `https://map.naver.com/v5/directions/${lng},${lat}`;
