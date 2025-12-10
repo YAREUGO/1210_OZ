@@ -10,12 +10,6 @@
 !.yarn/releases
 !.yarn/versions
 
-# pnpm
-pnpm-lock.yaml
-
-# npm (이 프로젝트는 pnpm 사용)
-package-lock.json
-
 # testing
 /coverage
 
