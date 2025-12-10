@@ -37,7 +37,12 @@
     - [ ] `NEXT_PUBLIC_NAVER_MAP_CLIENT_ID` (네이버 지도)
     - [ ] Clerk 인증 키 확인
     - [ ] Supabase 키 확인
-  - [ ] `.env.example` 파일 생성
+  - [x] `.env.example` 파일 생성
+    - [x] 한국관광공사 API 키 예시
+    - [x] 네이버 지도 Client ID 예시
+    - [x] Clerk 인증 키 예시
+    - [x] Supabase 키 예시
+    - [x] 각 환경변수에 대한 설명 주석 추가
 - [x] API 클라이언트 구현
   - [x] `lib/api/tour-api.ts` 생성
     - [x] `getAreaCode()` - 지역코드 조회 (`areaCode2`)
