@@ -16,11 +16,24 @@
  * - @/lib/api/tour-api: getAreaBasedList, getAreaCode, searchKeyword 함수
  */
 
-import { TourMapView } from "@/components/tour-map-view";
+import dynamic from "next/dynamic";
 import { TourFilters } from "@/components/tour-filters";
 import { getAreaBasedList, getAreaCode, searchKeyword } from "@/lib/api/tour-api";
 import { TourApiError } from "@/lib/api/tour-api";
 import type { TourItem } from "@/lib/types/tour";
+
+// 지도 컴포넌트를 동적 임포트로 로드 (번들 크기 최적화, 클라이언트 사이드만)
+const TourMapView = dynamic(
+  () => import("@/components/tour-map-view").then((mod) => ({ default: mod.TourMapView })),
+  {
+    loading: () => (
+      <div className="h-[600px] flex items-center justify-center text-muted-foreground">
+        지도를 불러오는 중...
+      </div>
+    ),
+    ssr: false, // 지도는 클라이언트 사이드에서만 렌더링
+  }
+);
 
 interface HomePageProps {
   searchParams: Promise<{

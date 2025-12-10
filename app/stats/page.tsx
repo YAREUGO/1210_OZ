@@ -17,11 +17,27 @@
  */
 
 import { Suspense } from "react";
+import dynamic from "next/dynamic";
 import { getStatsSummary, getRegionStats, getTypeStats } from "@/lib/api/stats-api";
 import { StatsSummary, StatsSummarySkeleton } from "@/components/stats/stats-summary";
-import { RegionChart } from "@/components/stats/region-chart";
-import { TypeChart } from "@/components/stats/type-chart";
 import { TourApiError } from "@/lib/api/tour-api";
+
+// 무거운 차트 컴포넌트를 동적 임포트로 로드 (번들 크기 최적화)
+const RegionChart = dynamic(
+  () => import("@/components/stats/region-chart").then((mod) => ({ default: mod.RegionChart })),
+  {
+    loading: () => <div className="h-[400px] flex items-center justify-center text-muted-foreground">로딩 중...</div>,
+    ssr: true, // 서버 사이드 렌더링 유지
+  }
+);
+
+const TypeChart = dynamic(
+  () => import("@/components/stats/type-chart").then((mod) => ({ default: mod.TypeChart })),
+  {
+    loading: () => <div className="h-[400px] flex items-center justify-center text-muted-foreground">로딩 중...</div>,
+    ssr: true, // 서버 사이드 렌더링 유지
+  }
+);
 
 /**
  * 통계 페이지 메타데이터
@@ -90,6 +106,7 @@ async function RegionChartContent() {
     );
   }
 
+  // 동적 임포트된 컴포넌트에 데이터 전달
   return <RegionChart data={regionStats} isLoading={false} limit={10} />;
 }
 
@@ -116,6 +133,7 @@ async function TypeChartContent() {
     );
   }
 
+  // 동적 임포트된 컴포넌트에 데이터 전달
   return <TypeChart data={typeStats} isLoading={false} />;
 }
 

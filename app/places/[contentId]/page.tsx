@@ -19,15 +19,28 @@
  */
 
 import { notFound } from "next/navigation";
+import dynamic from "next/dynamic";
 import { getDetailCommon, getDetailIntro, getDetailImage } from "@/lib/api/tour-api";
 import { TourApiNotFoundError } from "@/lib/api/tour-api";
 import { DetailInfo } from "@/components/tour-detail/detail-info";
 import { DetailIntro } from "@/components/tour-detail/detail-intro";
 import { DetailGallery } from "@/components/tour-detail/detail-gallery";
-import { DetailMap } from "@/components/tour-detail/detail-map";
 import { ShareButton } from "@/components/tour-detail/share-button";
 import { BookmarkButton } from "@/components/bookmarks/bookmark-button";
 import { Button } from "@/components/ui/button";
+
+// 지도 컴포넌트를 동적 임포트로 로드 (번들 크기 최적화, 클라이언트 사이드만)
+const DetailMap = dynamic(
+  () => import("@/components/tour-detail/detail-map").then((mod) => ({ default: mod.DetailMap })),
+  {
+    loading: () => (
+      <div className="h-[400px] flex items-center justify-center text-muted-foreground rounded-lg border bg-muted">
+        지도를 불러오는 중...
+      </div>
+    ),
+    ssr: false, // 지도는 클라이언트 사이드에서만 렌더링
+  }
+);
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 
