@@ -356,20 +356,29 @@
       - [ ] 네이버 지도 앱/웹 연동
       - [ ] URL: `https://map.naver.com/v5/directions/{좌표}`
     - [ ] 좌표 정보 표시 (선택 사항)
-- [ ] 공유 기능 (MVP 2.4.5)
-  - [ ] `components/tour-detail/share-button.tsx` 생성
-    - [ ] URL 복사 기능
-      - [ ] `navigator.clipboard.writeText()` 사용
-      - [ ] HTTPS 환경 확인
-    - [ ] 복사 완료 토스트 메시지
-    - [ ] 공유 아이콘 버튼 (Share/Link 아이콘)
-  - [ ] Open Graph 메타태그
-    - [ ] `app/places/[contentId]/page.tsx`에 Metadata 생성
-    - [ ] `og:title` - 관광지명
-    - [ ] `og:description` - 관광지 설명 (100자 이내)
-    - [ ] `og:image` - 대표 이미지 (1200x630 권장)
-    - [ ] `og:url` - 상세페이지 URL
-    - [ ] `og:type` - "website"
+- [x] 공유 기능 (MVP 2.4.5)
+  - [x] `components/tour-detail/share-button.tsx` 생성
+    - [x] URL 복사 기능
+      - [x] `navigator.clipboard.writeText()` 사용
+      - [x] HTTPS 환경 확인
+      - [x] 클립보드 API 미지원 시 fallback (document.execCommand)
+    - [x] 복사 완료 토스트 메시지
+    - [x] 공유 아이콘 버튼 (Share2 아이콘)
+    - [x] 복사 상태 표시 (Check 아이콘)
+  - [x] Open Graph 메타태그
+    - [x] `app/places/[contentId]/page.tsx`에 Metadata 생성 (generateMetadata)
+    - [x] `og:title` - 관광지명
+    - [x] `og:description` - 관광지 설명 (100자 이내)
+    - [x] `og:image` - 대표 이미지 (1200x630 권장)
+    - [x] `og:url` - 상세페이지 URL
+    - [x] `og:type` - "website"
+    - [x] Twitter Card 메타태그
+  - [x] 상세페이지 헤더에 공유 버튼 통합
+  ***
+  - [ ] 추가 구현 내용 (plan 모드 build로 개발 완료)
+    - [x] 반응형 디자인 (모바일/데스크톱)
+    - [x] 접근성 개선 (aria-label)
+    - [x] 클립보드 API fallback 처리
 - [ ] 북마크 기능 (MVP 2.4.5)
   - [ ] `components/bookmarks/bookmark-button.tsx` 생성
     - [ ] 별 아이콘 (채워짐/비어있음)

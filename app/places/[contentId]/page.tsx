@@ -22,6 +22,7 @@ import { notFound } from "next/navigation";
 import { getDetailCommon } from "@/lib/api/tour-api";
 import { TourApiNotFoundError } from "@/lib/api/tour-api";
 import { DetailInfo } from "@/components/tour-detail/detail-info";
+import { ShareButton } from "@/components/tour-detail/share-button";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
@@ -103,15 +104,18 @@ export default async function DetailPage({ params }: DetailPageProps) {
 
   return (
     <main className="min-h-screen">
-      {/* 헤더: 뒤로가기 버튼 */}
+      {/* 헤더: 뒤로가기 버튼 + 공유 버튼 */}
       <div className="sticky top-0 z-40 bg-background/95 backdrop-blur-sm border-b">
         <div className="container mx-auto px-4 py-4">
-          <Link href="/">
-            <Button variant="ghost" size="sm" className="gap-2">
-              <ArrowLeft className="h-4 w-4" />
-              <span>목록으로</span>
-            </Button>
-          </Link>
+          <div className="flex items-center justify-between">
+            <Link href="/">
+              <Button variant="ghost" size="sm" className="gap-2">
+                <ArrowLeft className="h-4 w-4" />
+                <span>목록으로</span>
+              </Button>
+            </Link>
+            <ShareButton size="sm" showText={false} />
+          </div>
         </div>
       </div>
 
