@@ -1,41 +1,112 @@
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import { RiSupabaseFill } from "react-icons/ri";
+/**
+ * @file page.tsx
+ * @description 홈페이지 - 관광지 목록
+ *
+ * 한국관광공사 API를 활용한 관광지 목록 페이지
+ *
+ * 주요 기능:
+ * 1. 관광지 목록 표시
+ * 2. 필터 기능 (지역, 타입, 정렬)
+ * 3. 검색 기능 (향후 구현)
+ * 4. 지도 연동 (향후 구현)
+ *
+ * @dependencies
+ * - @/components/tour-list: TourList 컴포넌트
+ * - @/components/tour-filters: TourFilters 컴포넌트
+ * - @/lib/api/tour-api: getAreaBasedList, getAreaCode 함수
+ */
 
-export default function Home() {
+import { TourList } from "@/components/tour-list";
+import { TourFilters } from "@/components/tour-filters";
+import { getAreaBasedList, getAreaCode } from "@/lib/api/tour-api";
+import { TourApiError } from "@/lib/api/tour-api";
+import type { TourItem } from "@/lib/types/tour";
+
+interface HomePageProps {
+  searchParams: Promise<{
+    areaCode?: string;
+    contentTypeId?: string;
+    sort?: string;
+    page?: string;
+  }>;
+}
+
+export default async function HomePage({ searchParams }: HomePageProps) {
+  const params = await searchParams;
+  const areaCode = params.areaCode;
+  const contentTypeId = params.contentTypeId;
+  const sort = params.sort || "latest";
+  const page = Number(params.page) || 1;
+
+  let tours: TourItem[] = [];
+  let error: Error | null = null;
+  let areaCodes: Array<{ code: string; name: string }> = [];
+
+  try {
+    // 지역 목록 조회
+    const areaCodesData = await getAreaCode();
+    areaCodes = areaCodesData.map((area) => ({
+      code: area.code,
+      name: area.name,
+    }));
+  } catch (err) {
+    console.error("지역 목록 조회 실패:", err);
+  }
+
+  try {
+    // 관광지 목록 조회
+    const result = await getAreaBasedList({
+      areaCode: areaCode || undefined,
+      contentTypeId: contentTypeId || undefined,
+      numOfRows: 20,
+      pageNo: page,
+    });
+    tours = result.items;
+
+    // 정렬 처리
+    if (sort === "name") {
+      tours.sort((a, b) => a.title.localeCompare(b.title, "ko"));
+    } else {
+      // 최신순 (modifiedtime 기준)
+      tours.sort((a, b) => {
+        const dateA = new Date(a.modifiedtime).getTime();
+        const dateB = new Date(b.modifiedtime).getTime();
+        return dateB - dateA;
+      });
+    }
+  } catch (err) {
+    console.error("관광지 목록 조회 실패:", err);
+    error = err instanceof Error ? err : new Error("알 수 없는 오류가 발생했습니다.");
+  }
+
   return (
-    <main className="min-h-[calc(100vh-80px)] flex items-center px-8 py-16 lg:py-24">
-      <section className="w-full max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-start lg:items-center">
-        {/* 좌측: 환영 메시지 */}
-        <div className="flex flex-col gap-8">
-          <h1 className="text-5xl lg:text-7xl font-bold leading-tight">
-            SaaS 앱 템플릿에 오신 것을 환영합니다
-          </h1>
-          <p className="text-xl lg:text-2xl text-gray-600 dark:text-gray-400 leading-relaxed">
-            Next.js, Shadcn, Clerk, Supabase, TailwindCSS로 구동되는 완전한
-            기능의 템플릿으로 다음 프로젝트를 시작하세요.
+    <main className="min-h-screen">
+      {/* 필터 섹션 */}
+      <TourFilters
+        areaCodes={areaCodes}
+        selectedAreaCode={areaCode}
+        selectedContentType={contentTypeId}
+        sortBy={sort as "latest" | "name"}
+      />
+
+      {/* 목록 섹션 */}
+      <div className="container mx-auto px-4 py-8">
+        <div className="mb-6">
+          <h1 className="text-3xl font-bold">관광지 목록</h1>
+          <p className="mt-2 text-muted-foreground">
+            {tours.length > 0
+              ? `총 ${tours.length}개의 관광지를 찾았습니다`
+              : "한국의 아름다운 관광지를 탐험해보세요"}
           </p>
         </div>
 
-        {/* 우측: 버튼 두 개 세로 정렬 */}
-        <div className="flex flex-col gap-6">
-          <Link href="/storage-test" className="w-full">
-            <Button className="w-full h-28 flex items-center justify-center gap-4 text-xl shadow-lg hover:shadow-xl transition-shadow">
-              <RiSupabaseFill className="w-8 h-8" />
-              <span>Storage 파일 업로드 테스트</span>
-            </Button>
-          </Link>
-          <Link href="/auth-test" className="w-full">
-            <Button
-              className="w-full h-28 flex items-center justify-center gap-4 text-xl shadow-lg hover:shadow-xl transition-shadow"
-              variant="outline"
-            >
-              <RiSupabaseFill className="w-8 h-8" />
-              <span>Clerk + Supabase 인증 연동</span>
-            </Button>
-          </Link>
-        </div>
-      </section>
+        <TourList
+          tours={tours}
+          isLoading={false}
+          error={error}
+          // 서버 컴포넌트에서는 onRetry를 전달하지 않음 (클라이언트 컴포넌트에서 처리)
+        />
+      </div>
     </main>
   );
 }

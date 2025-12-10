@@ -5,6 +5,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 
 import Navbar from "@/components/Navbar";
 import { SyncUserProvider } from "@/components/providers/sync-user-provider";
+import { ToasterProvider } from "@/components/providers/toaster-provider";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -18,8 +19,45 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "SaaS 템플릿",
-  description: "Next.js + Clerk + Supabase 보일러플레이트",
+  title: {
+    default: "My Trip - 한국 관광지 정보 서비스",
+    template: "%s | My Trip",
+  },
+  description: "전국 관광지 정보를 한 곳에서 검색하고, 지도에서 확인하며, 상세 정보를 조회할 수 있는 웹 서비스",
+  keywords: ["관광지", "여행", "한국", "관광 정보", "지도", "검색"],
+  authors: [{ name: "My Trip" }],
+  creator: "My Trip",
+  publisher: "My Trip",
+  formatDetection: {
+    email: false,
+    address: false,
+    telephone: false,
+  },
+  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"),
+  openGraph: {
+    type: "website",
+    locale: "ko_KR",
+    url: "/",
+    title: "My Trip - 한국 관광지 정보 서비스",
+    description: "전국 관광지 정보를 한 곳에서 검색하고, 지도에서 확인하며, 상세 정보를 조회할 수 있는 웹 서비스",
+    siteName: "My Trip",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "My Trip - 한국 관광지 정보 서비스",
+    description: "전국 관광지 정보를 한 곳에서 검색하고, 지도에서 확인하며, 상세 정보를 조회할 수 있는 웹 서비스",
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
 };
 
 /**
@@ -62,6 +100,7 @@ export default function RootLayout({
           <SyncUserProvider>
             <Navbar />
             {children}
+            <ToasterProvider />
           </SyncUserProvider>
         </body>
       </html>

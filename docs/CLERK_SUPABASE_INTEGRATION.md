@@ -3,6 +3,7 @@
 이 문서는 Clerk와 Supabase를 최신 모범 사례에 따라 통합하는 방법을 설명합니다.
 
 > **📅 업데이트**: 2025년 4월 이후 권장 방식 (네이티브 통합)
+>
 > - JWT Template 방식은 더 이상 사용하지 않습니다
 > - Clerk Dashboard에서 직접 Supabase 통합을 활성화합니다
 > - JWT secret key를 공유할 필요가 없습니다
@@ -80,10 +81,10 @@ lib/supabase/
 Client Component에서는 `useClerkSupabaseClient` 훅을 사용합니다:
 
 ```tsx
-'use client';
+"use client";
 
-import { useClerkSupabaseClient } from '@/lib/supabase/clerk-client';
-import { useEffect, useState } from 'react';
+import { useClerkSupabaseClient } from "@/lib/supabase/clerk-client";
+import { useEffect, useState } from "react";
 
 export default function TasksPage() {
   const supabase = useClerkSupabaseClient();
@@ -91,10 +92,8 @@ export default function TasksPage() {
 
   useEffect(() => {
     async function loadTasks() {
-      const { data, error } = await supabase
-        .from('tasks')
-        .select('*');
-      
+      const { data, error } = await supabase.from("tasks").select("*");
+
       if (!error) {
         setTasks(data);
       }
@@ -119,14 +118,12 @@ export default function TasksPage() {
 Server Component에서는 `createClerkSupabaseClient` 함수를 사용합니다. 이 함수는 `async`이므로 `await`를 사용해야 합니다:
 
 ```tsx
-import { createClerkSupabaseClient } from '@/lib/supabase/server';
+import { createClerkSupabaseClient } from "@/lib/supabase/server";
 
 export default async function TasksPage() {
   const supabase = await createClerkSupabaseClient();
-  
-  const { data: tasks, error } = await supabase
-    .from('tasks')
-    .select('*');
+
+  const { data: tasks, error } = await supabase.from("tasks").select("*");
 
   if (error) {
     throw error;
@@ -148,19 +145,17 @@ export default async function TasksPage() {
 Server Action에서도 동일한 함수를 사용합니다:
 
 ```tsx
-'use server';
+"use server";
 
-import { createClerkSupabaseClient } from '@/lib/supabase/server';
+import { createClerkSupabaseClient } from "@/lib/supabase/server";
 
 export async function createTask(name: string) {
   const supabase = await createClerkSupabaseClient();
-  
-  const { data, error } = await supabase
-    .from('tasks')
-    .insert({ name });
+
+  const { data, error } = await supabase.from("tasks").insert({ name });
 
   if (error) {
-    throw new Error('Failed to create task');
+    throw new Error("Failed to create task");
   }
 
   return data;
@@ -247,6 +242,7 @@ ALTER TABLE tasks ENABLE ROW LEVEL SECURITY;
 ### 통합 테스트
 
 1. **로그인 테스트**
+
    - Clerk를 통해 로그인
    - Supabase 클라이언트로 데이터 조회 시도
    - 성공하면 통합이 정상 작동하는 것입니다
@@ -261,23 +257,23 @@ ALTER TABLE tasks ENABLE ROW LEVEL SECURITY;
 Clerk 세션 토큰 확인:
 
 ```tsx
-'use client';
+"use client";
 
-import { useAuth } from '@clerk/nextjs';
+import { useAuth } from "@clerk/nextjs";
 
 export default function DebugPage() {
   const { getToken } = useAuth();
 
   async function checkToken() {
     const token = await getToken();
-    console.log('Clerk Token:', token);
-    
+    console.log("Clerk Token:", token);
+
     // 토큰 디코딩 (base64)
     if (token) {
-      const payload = JSON.parse(atob(token.split('.')[1]));
-      console.log('Token Payload:', payload);
-      console.log('Role:', payload.role); // "authenticated" 여부 확인
-      console.log('Sub (User ID):', payload.sub);
+      const payload = JSON.parse(atob(token.split(".")[1]));
+      console.log("Token Payload:", payload);
+      console.log("Role:", payload.role); // "authenticated" 여부 확인
+      console.log("Sub (User ID):", payload.sub);
     }
   }
 
@@ -296,6 +292,7 @@ export default function DebugPage() {
 **원인**: Supabase에서 Clerk domain이 올바르게 설정되지 않음
 
 **해결**:
+
 1. Supabase Dashboard → Settings → Authentication → Providers 확인
 2. Clerk provider의 domain이 올바른지 확인
 3. Clerk Dashboard에서 domain이 변경되지 않았는지 확인
@@ -305,6 +302,7 @@ export default function DebugPage() {
 **원인**: RLS가 비활성화되어 있거나 정책이 올바르지 않음
 
 **해결**:
+
 1. RLS 활성화 확인: `SELECT tablename, rowsecurity FROM pg_tables WHERE schemaname = 'public';`
 2. 정책 확인: `SELECT * FROM pg_policies WHERE tablename = 'tasks';`
 3. `auth.jwt()->>'sub'`가 올바르게 사용되는지 확인
@@ -314,6 +312,7 @@ export default function DebugPage() {
 **원인**: Clerk Dashboard에서 Supabase 통합이 활성화되지 않음
 
 **해결**:
+
 1. Clerk Dashboard → Integrations → Supabase 확인
 2. "Activate Supabase integration" 클릭
 3. 통합이 활성화되었는지 확인
@@ -328,4 +327,3 @@ export default function DebugPage() {
 ## 변경 이력
 
 - **2025-01**: 네이티브 통합 방식으로 업데이트 (JWT Template 방식 제거)
-
