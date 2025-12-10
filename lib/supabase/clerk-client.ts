@@ -1,17 +1,18 @@
 "use client";
 
-import { createBrowserClient } from "@supabase/ssr";
-import { useAuth } from "@clerk/nextjs";
+import { createClient } from "@supabase/supabase-js";
+import { useSession } from "@clerk/nextjs";
 import { useMemo } from "react";
 
 /**
  * Clerk + Supabase 네이티브 통합 클라이언트 (Client Component용)
  *
- * Supabase 공식 문서의 Next.js 패턴을 따르면서 Clerk 통합을 유지합니다:
- * - @supabase/ssr의 createBrowserClient 사용 (2025년 권장 방식)
- * - 자동 cookie 관리 (document.cookie 사용)
- * - Clerk 토큰을 accessToken으로 전달하여 third-party auth 사용
+ * Clerk 공식 문서의 권장 패턴을 따릅니다:
+ * - @supabase/supabase-js의 createClient 사용 (accessToken 옵션 지원)
+ * - Clerk의 session.getToken()을 accessToken으로 전달
  * - React Hook으로 제공되어 Client Component에서 사용
+ *
+ * @see https://clerk.com/docs/integrations/databases/supabase
  *
  * @example
  * ```tsx
@@ -32,19 +33,18 @@ import { useMemo } from "react";
  * ```
  */
 export function useClerkSupabaseClient() {
-  const { getToken } = useAuth();
+  const { session } = useSession();
 
   const supabase = useMemo(() => {
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
     const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
 
-    return createBrowserClient(supabaseUrl, supabaseKey, {
-      // Clerk 토큰을 accessToken으로 전달
+    return createClient(supabaseUrl, supabaseKey, {
       async accessToken() {
-        return (await getToken()) ?? null;
+        return session?.getToken() ?? null;
       },
     });
-  }, [getToken]);
+  }, [session]);
 
   return supabase;
 }
