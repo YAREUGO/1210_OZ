@@ -68,7 +68,9 @@ export function DetailMap({ detail, height = "400px", className }: DetailMapProp
       };
       script.onerror = (error) => {
         console.error("네이버 지도 API 스크립트 로드 실패:", error);
-        setMapError("지도 API를 불러오는데 실패했습니다");
+        setMapError(
+          "지도 API를 불러오는데 실패했습니다. 네이버 클라우드 플랫폼에서 웹 서비스 URL이 등록되었는지 확인하세요."
+        );
       };
       document.head.appendChild(script);
     } else {

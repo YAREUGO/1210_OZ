@@ -99,10 +99,18 @@ export function NaverMap({
     script.src = `https://oapi.map.naver.com/openapi/v3/maps.js?ncpKeyId=${ncpKeyId}`;
     script.async = true;
     script.onload = () => {
-      setIsLoaded(true);
+      if (window.naver && window.naver.maps) {
+        setIsLoaded(true);
+      } else {
+        console.error("네이버 지도 API가 제대로 로드되지 않았습니다");
+      }
     };
-    script.onerror = () => {
-      console.error("네이버 지도 API 로드 실패");
+    script.onerror = (error) => {
+      console.error("네이버 지도 API 스크립트 로드 실패:", error);
+      console.warn(
+        "네이버 클라우드 플랫폼에서 웹 서비스 URL이 등록되었는지 확인하세요:",
+        window.location.origin
+      );
     };
     document.head.appendChild(script);
 
@@ -113,7 +121,12 @@ export function NaverMap({
 
   // 지도 초기화
   useEffect(() => {
-    if (!isLoaded || !window.naver || !mapRef.current) return;
+    if (!isLoaded || !window.naver || !window.naver.maps || !mapRef.current) {
+      if (isLoaded && (!window.naver || !window.naver.maps)) {
+        console.error("네이버 지도 API가 제대로 초기화되지 않았습니다");
+      }
+      return;
+    }
 
     // 좌표 변환
     const coordinates = tours

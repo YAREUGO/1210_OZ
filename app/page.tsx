@@ -68,6 +68,8 @@ export default async function HomePage({ searchParams }: HomePageProps) {
     }));
   } catch (err) {
     console.error("지역 목록 조회 실패:", err);
+    // 지역 목록 조회 실패는 치명적이지 않으므로 계속 진행
+    // areaCodes는 빈 배열로 유지
   }
 
   try {
@@ -110,6 +112,9 @@ export default async function HomePage({ searchParams }: HomePageProps) {
   } catch (err) {
     console.error("관광지 목록 조회 실패:", err);
     error = err instanceof Error ? err : new Error("알 수 없는 오류가 발생했습니다.");
+    // 에러 발생 시에도 빈 배열로 초기화하여 렌더링 오류 방지
+    tours = [];
+    totalCount = 0;
   }
 
   return (
