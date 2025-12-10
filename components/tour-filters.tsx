@@ -29,7 +29,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { CONTENT_TYPE, CONTENT_TYPE_NAME, type ContentTypeId } from "@/lib/types/tour";
+import {
+  CONTENT_TYPE,
+  CONTENT_TYPE_NAME,
+  type ContentTypeId,
+} from "@/lib/types/tour";
 import { cn } from "@/lib/utils";
 import type { AreaCode } from "@/lib/types/tour";
 
@@ -115,8 +119,14 @@ export function TourFilters({
           <div className="flex flex-wrap items-center gap-3">
             {/* 지역 필터 */}
             <div className="flex items-center gap-2">
-              <MapPin className="h-4 w-4 text-muted-foreground" aria-hidden="true" />
-              <Select value={selectedAreaCode || "all"} onValueChange={handleAreaChange}>
+              <MapPin
+                className="h-4 w-4 text-muted-foreground"
+                aria-hidden="true"
+              />
+              <Select
+                value={selectedAreaCode || "all"}
+                onValueChange={handleAreaChange}
+              >
                 <SelectTrigger className="w-[140px]">
                   <SelectValue placeholder="지역 선택" />
                 </SelectTrigger>
@@ -133,7 +143,10 @@ export function TourFilters({
 
             {/* 관광 타입 필터 */}
             <div className="flex items-center gap-2">
-              <Filter className="h-4 w-4 text-muted-foreground" aria-hidden="true" />
+              <Filter
+                className="h-4 w-4 text-muted-foreground"
+                aria-hidden="true"
+              />
               <Select
                 value={selectedContentType || "all"}
                 onValueChange={handleContentTypeChange}
@@ -154,7 +167,10 @@ export function TourFilters({
 
             {/* 정렬 옵션 */}
             <div className="flex items-center gap-2">
-              <ArrowUpDown className="h-4 w-4 text-muted-foreground" aria-hidden="true" />
+              <ArrowUpDown
+                className="h-4 w-4 text-muted-foreground"
+                aria-hidden="true"
+              />
               <Select value={sortBy} onValueChange={handleSortChange}>
                 <SelectTrigger className="w-[120px]">
                   <SelectValue placeholder="정렬" />
@@ -178,4 +194,3 @@ export function TourFilters({
     </div>
   );
 }
-
