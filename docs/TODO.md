@@ -348,14 +348,24 @@
     - [ ] 이미지 클릭 시 전체화면 모달
     - [ ] 이미지 없으면 기본 이미지
     - [ ] Next.js Image 컴포넌트 사용 (최적화)
-- [ ] 지도 섹션 (MVP 2.4.4)
-  - [ ] `components/tour-detail/detail-map.tsx` 생성
-    - [ ] 해당 관광지 위치 표시
-    - [ ] 마커 1개 표시
-    - [ ] "길찾기" 버튼
-      - [ ] 네이버 지도 앱/웹 연동
-      - [ ] URL: `https://map.naver.com/v5/directions/{좌표}`
-    - [ ] 좌표 정보 표시 (선택 사항)
+- [x] 지도 섹션 (MVP 2.4.4)
+  - [x] `components/tour-detail/detail-map.tsx` 생성
+    - [x] 해당 관광지 위치 표시 (네이버 지도)
+    - [x] 마커 1개 표시
+    - [x] 인포윈도우 (관광지명, 주소)
+    - [x] "길찾기" 버튼
+      - [x] 네이버 지도 앱/웹 연동
+      - [x] URL: `https://map.naver.com/v5/directions/{좌표}`
+    - [x] 주소 정보 표시
+    - [x] 좌표 변환 (KATEC → WGS84)
+  - [x] 상세페이지에 지도 섹션 통합
+  ***
+  - [ ] 추가 구현 내용 (plan 모드 build로 개발 완료)
+    - [x] Naver Maps API 동적 로드
+    - [x] 환경변수 검증
+    - [x] 지도 로딩 상태 표시
+    - [x] 에러 처리
+    - [x] 반응형 디자인
 - [x] 공유 기능 (MVP 2.4.5)
   - [x] `components/tour-detail/share-button.tsx` 생성
     - [x] URL 복사 기능

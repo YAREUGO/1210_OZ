@@ -129,7 +129,10 @@ export default async function DetailPage({ params }: DetailPageProps) {
             </Link>
           </div>
         ) : (
-          <DetailInfo detail={detail} />
+          <div className="space-y-8">
+            <DetailInfo detail={detail} />
+            <DetailMap detail={detail} />
+          </div>
         )}
       </div>
     </main>
