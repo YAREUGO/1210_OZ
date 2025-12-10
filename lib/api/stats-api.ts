@@ -23,16 +23,27 @@
  * @see {@link /docs/PRD.md} - 통계 대시보드 명세
  */
 
+import { unstable_cache } from "next/cache";
 import { getAreaCode, getAreaBasedList } from "@/lib/api/tour-api";
 import { TourApiError } from "@/lib/api/tour-api";
 import type { RegionStats, TypeStats, StatsSummary } from "@/lib/types/stats";
 import { CONTENT_TYPE, CONTENT_TYPE_NAME } from "@/lib/types/tour";
 
 /**
- * 지역별 관광지 개수 집계
- * @returns 지역별 통계 배열
+ * 캐시 설정
+ * - revalidate: 3600 (1시간)
+ * - tags: 통계 데이터 캐시 태그
  */
-export async function getRegionStats(): Promise<RegionStats[]> {
+const CACHE_CONFIG = {
+  revalidate: 3600, // 1시간
+  tags: ["stats"],
+};
+
+/**
+ * 지역별 관광지 개수 집계 (내부 함수)
+ * 캐싱 없이 실제 API 호출 수행
+ */
+async function _getRegionStatsInternal(): Promise<RegionStats[]> {
   try {
     // 지역 목록 조회
     const areaCodes = await getAreaCode();
@@ -82,10 +93,20 @@ export async function getRegionStats(): Promise<RegionStats[]> {
 }
 
 /**
- * 타입별 관광지 개수 집계
- * @returns 타입별 통계 배열
+ * 지역별 관광지 개수 집계 (캐싱 적용)
+ * @returns 지역별 통계 배열
  */
-export async function getTypeStats(): Promise<TypeStats[]> {
+export const getRegionStats = unstable_cache(
+  _getRegionStatsInternal,
+  ["region-stats"],
+  CACHE_CONFIG
+);
+
+/**
+ * 타입별 관광지 개수 집계 (내부 함수)
+ * 캐싱 없이 실제 API 호출 수행
+ */
+async function _getTypeStatsInternal(): Promise<TypeStats[]> {
   try {
     // 모든 Content Type ID 목록
     const contentTypeIds = Object.values(CONTENT_TYPE);
@@ -147,12 +168,22 @@ export async function getTypeStats(): Promise<TypeStats[]> {
 }
 
 /**
- * 통계 요약 정보 생성
- * @returns 통계 요약 정보
+ * 타입별 관광지 개수 집계 (캐싱 적용)
+ * @returns 타입별 통계 배열
  */
-export async function getStatsSummary(): Promise<StatsSummary> {
+export const getTypeStats = unstable_cache(
+  _getTypeStatsInternal,
+  ["type-stats"],
+  CACHE_CONFIG
+);
+
+/**
+ * 통계 요약 정보 생성 (내부 함수)
+ * 캐싱된 통계 데이터를 사용하여 요약 정보 생성
+ */
+async function _getStatsSummaryInternal(): Promise<StatsSummary> {
   try {
-    // 지역별 및 타입별 통계를 병렬로 조회
+    // 캐싱된 통계 데이터를 사용 (캐시된 함수 호출)
     const [regionStats, typeStats] = await Promise.all([
       getRegionStats(),
       getTypeStats(),
@@ -180,4 +211,14 @@ export async function getStatsSummary(): Promise<StatsSummary> {
     );
   }
 }
+
+/**
+ * 통계 요약 정보 생성 (캐싱 적용)
+ * @returns 통계 요약 정보
+ */
+export const getStatsSummary = unstable_cache(
+  _getStatsSummaryInternal,
+  ["stats-summary"],
+  CACHE_CONFIG
+);
 
