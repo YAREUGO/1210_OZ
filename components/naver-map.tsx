@@ -30,9 +30,10 @@ import { Button } from "@/components/ui/button";
 import { ZoomIn, ZoomOut, Map, Satellite } from "lucide-react";
 
 // Naver Maps API 타입 선언
+// Naver Maps API는 공식 타입 정의가 없으므로 any 사용
 declare global {
   interface Window {
-    naver: typeof naver;
+    naver: any;
   }
 }
 
@@ -68,9 +69,9 @@ export function NaverMap({
   className,
 }: NaverMapProps) {
   const mapRef = useRef<HTMLDivElement>(null);
-  const mapInstanceRef = useRef<naver.maps.Map | null>(null);
-  const markersRef = useRef<naver.maps.Marker[]>([]);
-  const infoWindowsRef = useRef<naver.maps.InfoWindow[]>([]);
+  const mapInstanceRef = useRef<any>(null);
+  const markersRef = useRef<any[]>([]);
+  const infoWindowsRef = useRef<any[]>([]);
   const router = useRouter();
   const [mapType, setMapType] = useState<"normal" | "satellite">("normal");
   const [isLoaded, setIsLoaded] = useState(false);

@@ -16,13 +16,14 @@
  * - @/lib/api/tour-api: getAreaBasedList, getAreaCode, searchKeyword 함수
  */
 
+import { Suspense } from "react";
 import dynamic from "next/dynamic";
 import { TourFilters } from "@/components/tour-filters";
 import { getAreaBasedList, getAreaCode, searchKeyword } from "@/lib/api/tour-api";
-import { TourApiError } from "@/lib/api/tour-api";
 import type { TourItem } from "@/lib/types/tour";
 
-// 지도 컴포넌트를 동적 임포트로 로드 (번들 크기 최적화, 클라이언트 사이드만)
+// 지도 컴포넌트를 동적 임포트로 로드 (번들 크기 최적화)
+// TourMapView는 이미 "use client"로 되어 있어 클라이언트에서만 렌더링됨
 const TourMapView = dynamic(
   () => import("@/components/tour-map-view").then((mod) => ({ default: mod.TourMapView })),
   {
@@ -31,7 +32,7 @@ const TourMapView = dynamic(
         지도를 불러오는 중...
       </div>
     ),
-    ssr: false, // 지도는 클라이언트 사이드에서만 렌더링
+    ssr: true, // Server Component에서는 ssr: true 필수 (컴포넌트 내부에서 클라이언트 렌더링)
   }
 );
 
@@ -113,13 +114,23 @@ export default async function HomePage({ searchParams }: HomePageProps) {
 
   return (
     <main className="min-h-screen">
-      {/* 필터 섹션 */}
-      <TourFilters
-        areaCodes={areaCodes}
-        selectedAreaCode={areaCode}
-        selectedContentType={contentTypeId}
-        sortBy={sort as "latest" | "name"}
-      />
+      {/* 필터 섹션 - useSearchParams 사용으로 Suspense 필요 */}
+      <Suspense
+        fallback={
+          <div className="border-b bg-background/95 backdrop-blur-sm">
+            <div className="container mx-auto px-4 py-4">
+              <div className="h-12 bg-muted animate-pulse rounded" />
+            </div>
+          </div>
+        }
+      >
+        <TourFilters
+          areaCodes={areaCodes}
+          selectedAreaCode={areaCode}
+          selectedContentType={contentTypeId}
+          sortBy={sort as "latest" | "name"}
+        />
+      </Suspense>
 
       {/* 목록 + 지도 섹션 */}
       <div className="container mx-auto px-4 py-8">

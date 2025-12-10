@@ -109,7 +109,7 @@
   ```typescript
   export function katecToWgs84(
     mapx: string | number,
-    mapy: string | number
+    mapy: string | number,
   ): { lng: number; lat: number } {
     const x = typeof mapx === "string" ? parseFloat(mapx) : mapx;
     const y = typeof mapy === "string" ? parseFloat(mapy) : mapy;
@@ -127,7 +127,12 @@
     const convertedLng = x / 10000000;
     const convertedLat = y / 10000000;
 
-    if (convertedLng >= 124 && convertedLng <= 132 && convertedLat >= 33 && convertedLat <= 43) {
+    if (
+      convertedLng >= 124 &&
+      convertedLng <= 132 &&
+      convertedLat >= 33 &&
+      convertedLat <= 43
+    ) {
       return { lng: convertedLng, lat: convertedLat };
     }
 

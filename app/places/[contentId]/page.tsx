@@ -29,7 +29,8 @@ import { ShareButton } from "@/components/tour-detail/share-button";
 import { BookmarkButton } from "@/components/bookmarks/bookmark-button";
 import { Button } from "@/components/ui/button";
 
-// 지도 컴포넌트를 동적 임포트로 로드 (번들 크기 최적화, 클라이언트 사이드만)
+// 지도 컴포넌트를 동적 임포트로 로드 (번들 크기 최적화)
+// DetailMap은 이미 "use client"로 되어 있어 클라이언트에서만 렌더링됨
 const DetailMap = dynamic(
   () => import("@/components/tour-detail/detail-map").then((mod) => ({ default: mod.DetailMap })),
   {
@@ -38,7 +39,7 @@ const DetailMap = dynamic(
         지도를 불러오는 중...
       </div>
     ),
-    ssr: false, // 지도는 클라이언트 사이드에서만 렌더링
+    ssr: true, // Server Component에서는 ssr: true 필수 (컴포넌트 내부에서 클라이언트 렌더링)
   }
 );
 import { ArrowLeft } from "lucide-react";

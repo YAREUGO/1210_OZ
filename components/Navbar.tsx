@@ -17,7 +17,7 @@
 
 import { SignedOut, SignInButton, SignedIn, UserButton } from "@clerk/nextjs";
 import Link from "next/link";
-import React from "react";
+import React, { Suspense } from "react";
 import { Button } from "@/components/ui/button";
 import { Home, BarChart3, Bookmark } from "lucide-react";
 import { TourSearch } from "@/components/tour-search";
@@ -60,9 +60,11 @@ const Navbar = () => {
 
         {/* 검색창 및 인증 버튼 */}
         <div className="flex items-center gap-4">
-          {/* 검색창 */}
+          {/* 검색창 - useSearchParams 사용으로 Suspense 필요 */}
           <div className="hidden lg:block">
-            <TourSearch variant="navbar" />
+            <Suspense fallback={<div className="w-64 h-10 bg-muted animate-pulse rounded" />}>
+              <TourSearch variant="navbar" />
+            </Suspense>
           </div>
 
           {/* 로그인/회원가입 버튼 */}

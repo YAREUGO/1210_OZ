@@ -199,3 +199,4 @@ export function DetailIntro({ intro }: DetailIntroProps) {
   );
 }
 
+

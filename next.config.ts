@@ -23,8 +23,7 @@ const nextConfig: NextConfig = {
   },
   // 압축 설정
   compress: true,
-  // 프로덕션 빌드 최적화
-  swcMinify: true,
+  // 프로덕션 빌드 최적화 (Next.js 15에서는 기본적으로 활성화됨)
   // 번들 분석 (개발 시에만)
   ...(process.env.ANALYZE === "true" && {
     webpack: (config: any) => {

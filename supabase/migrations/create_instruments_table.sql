@@ -48,3 +48,4 @@ GRANT ALL ON TABLE public.instruments TO anon;
 GRANT ALL ON TABLE public.instruments TO authenticated;
 GRANT ALL ON TABLE public.instruments TO service_role;
 
+

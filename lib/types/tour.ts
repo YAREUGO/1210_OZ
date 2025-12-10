@@ -65,6 +65,9 @@ export interface TourDetail {
   firstimage2?: string; // 대표이미지2
   mapx: string; // 경도 (KATEC 좌표계, 정수형)
   mapy: string; // 위도 (KATEC 좌표계, 정수형)
+  cat1?: string; // 대분류
+  cat2?: string; // 중분류
+  cat3?: string; // 소분류
 }
 
 /**
@@ -157,4 +160,5 @@ export const CONTENT_TYPE_NAME: Record<ContentTypeId, string> = {
 export function getContentTypeName(contentTypeId: string): string {
   return CONTENT_TYPE_NAME[contentTypeId as ContentTypeId] || "알 수 없음";
 }
+
 
