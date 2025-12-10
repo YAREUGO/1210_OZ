@@ -108,7 +108,11 @@ export function NaverMap({
     script.onerror = (error) => {
       console.error("네이버 지도 API 스크립트 로드 실패:", error);
       console.warn(
-        "네이버 클라우드 플랫폼에서 웹 서비스 URL이 등록되었는지 확인하세요:",
+        "💡 네이버 클라우드 플랫폼에서 웹 서비스 URL이 등록되었는지 확인하세요:",
+        window.location.origin
+      );
+      console.warn(
+        "💡 네이버 클라우드 플랫폼 → Maps API → 웹 서비스 URL에 다음을 추가하세요:",
         window.location.origin
       );
     };

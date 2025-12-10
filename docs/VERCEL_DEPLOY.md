@@ -82,6 +82,10 @@ NEXT_PUBLIC_NAVER_MAP_CLIENT_ID=your-naver-map-client-id
 - [네이버 클라우드 플랫폼](https://www.ncloud.com/)
 - Maps API 서비스 신청 후 Client ID 발급
 
+**⚠️ 중요**: 배포 후 반드시 네이버 클라우드 플랫폼에서 **웹 서비스 URL**을 등록해야 합니다!
+- Vercel 배포 URL: `https://1210oz.vercel.app` (또는 실제 배포 URL)
+- 자세한 설정 방법: [네이버 지도 API 설정 가이드](./NAVER_MAP_SETUP.md)
+
 #### 앱 URL (선택 사항)
 
 ```env
