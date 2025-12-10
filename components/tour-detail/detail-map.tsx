@@ -48,29 +48,37 @@ export function DetailMap({ detail, height = "400px", className }: DetailMapProp
     // 환경변수 확인
     const ncpKeyId = process.env.NEXT_PUBLIC_NAVER_MAP_CLIENT_ID;
     if (!ncpKeyId) {
+      console.error("NEXT_PUBLIC_NAVER_MAP_CLIENT_ID가 설정되지 않았습니다");
       setMapError("지도 API 키가 설정되지 않았습니다");
       return;
     }
 
+    console.log("네이버 지도 API 키 확인:", ncpKeyId.substring(0, 5) + "...");
+
     // Naver Maps API 스크립트 로드 확인
     if (typeof window === "undefined" || !window.naver) {
+      console.log("네이버 지도 API 스크립트 로드 시작");
       // 스크립트 동적 로드
       const script = document.createElement("script");
       script.src = `https://oapi.map.naver.com/openapi/v3/maps.js?ncpKeyId=${ncpKeyId}`;
       script.async = true;
       script.onload = () => {
+        console.log("네이버 지도 API 스크립트 로드 완료");
         initializeMap();
       };
-      script.onerror = () => {
+      script.onerror = (error) => {
+        console.error("네이버 지도 API 스크립트 로드 실패:", error);
         setMapError("지도 API를 불러오는데 실패했습니다");
       };
       document.head.appendChild(script);
     } else {
+      console.log("네이버 지도 API가 이미 로드되어 있음");
       initializeMap();
     }
 
     function initializeMap() {
       if (!mapRef.current || !window.naver) {
+        console.warn("지도 초기화 실패: mapRef 또는 naver 객체가 없습니다");
         return;
       }
 
@@ -82,7 +90,6 @@ export function DetailMap({ detail, height = "400px", className }: DetailMapProp
         }
 
         // 좌표 변환 (KATEC → WGS84)
-        // katecToWgs84 함수가 내부에서 10000000으로 나누므로 원본 값을 전달
         const mapx = detail.mapx;
         const mapy = detail.mapy;
         
@@ -95,6 +102,20 @@ export function DetailMap({ detail, height = "400px", className }: DetailMapProp
         const coordinates = katecToWgs84(mapx, mapy);
         const { lng, lat } = coordinates;
 
+        // 디버깅: 좌표 값 확인
+        console.log("지도 좌표 변환:", {
+          원본: { mapx, mapy },
+          변환후: { lng, lat },
+          관광지: detail.title,
+        });
+
+        // 좌표 유효성 검증 (한국 좌표 범위: 경도 124-132, 위도 33-43)
+        if (lng < 124 || lng > 132 || lat < 33 || lat > 43) {
+          console.error("좌표가 한국 범위를 벗어남:", { lng, lat });
+          setMapError("좌표가 유효하지 않습니다");
+          return;
+        }
+
         // 지도 초기화
         const map = new window.naver.maps.Map(mapRef.current, {
           center: new window.naver.maps.LatLng(lat, lng),
@@ -104,6 +125,8 @@ export function DetailMap({ detail, height = "400px", className }: DetailMapProp
             position: window.naver.maps.Position.TOP_RIGHT,
           },
         });
+
+        console.log("지도 초기화 성공:", { center: { lat, lng }, zoom: 16 });
 
         // 마커 생성
         const marker = new window.naver.maps.Marker({
@@ -134,10 +157,16 @@ export function DetailMap({ detail, height = "400px", className }: DetailMapProp
         // 초기 인포윈도우 표시
         infoWindow.open(map, marker);
 
+        console.log("마커 및 인포윈도우 생성 완료");
         setMapLoaded(true);
       } catch (error) {
         console.error("지도 초기화 실패:", error);
-        setMapError("지도를 불러오는데 실패했습니다");
+        console.error("에러 상세:", {
+          message: error instanceof Error ? error.message : String(error),
+          stack: error instanceof Error ? error.stack : undefined,
+          detail: detail,
+        });
+        setMapError(`지도를 불러오는데 실패했습니다: ${error instanceof Error ? error.message : String(error)}`);
       }
     }
   }, [detail]);
