@@ -75,10 +75,24 @@ export function DetailMap({ detail, height = "400px", className }: DetailMapProp
       }
 
       try {
+        // 좌표 값 검증
+        if (!detail.mapx || !detail.mapy) {
+          setMapError("좌표 정보가 없습니다");
+          return;
+        }
+
         // 좌표 변환 (KATEC → WGS84)
         const mapx = parseFloat(detail.mapx) / 10000000;
         const mapy = parseFloat(detail.mapy) / 10000000;
-        const { lng, lat } = katecToWgs84(mapx, mapy);
+        
+        // 좌표가 유효한지 확인
+        if (isNaN(mapx) || isNaN(mapy)) {
+          setMapError("유효하지 않은 좌표입니다");
+          return;
+        }
+
+        const coordinates = katecToWgs84(mapx, mapy);
+        const { lng, lat } = coordinates;
 
         // 지도 초기화
         const map = new window.naver.maps.Map(mapRef.current, {
