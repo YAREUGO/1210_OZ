@@ -300,25 +300,35 @@
 
 ## Phase 3: 상세페이지 (`/places/[contentId]`)
 
-- [ ] 페이지 기본 구조
-  - [ ] `app/places/[contentId]/page.tsx` 생성
-    - [ ] 동적 라우팅 설정
-    - [ ] 뒤로가기 버튼 (헤더)
-    - [ ] 기본 레이아웃 구조
-    - [ ] 라우팅 테스트
-- [ ] 기본 정보 섹션 (MVP 2.4.1)
-  - [ ] `components/tour-detail/detail-info.tsx` 생성
-    - [ ] `getDetailCommon()` API 연동
-    - [ ] 관광지명 (대제목)
-    - [ ] 대표 이미지 (크게 표시)
-    - [ ] 주소 표시 및 복사 기능
-      - [ ] 클립보드 API 사용
-      - [ ] 복사 완료 토스트
-    - [ ] 전화번호 (클릭 시 전화 연결)
-    - [ ] 홈페이지 (링크)
-    - [ ] 개요 (긴 설명문)
-    - [ ] 관광 타입 및 카테고리 뱃지
-    - [ ] 정보 없는 항목 숨김 처리
+- [x] 페이지 기본 구조
+  - [x] `app/places/[contentId]/page.tsx` 생성
+    - [x] 동적 라우팅 설정 (Next.js 15 App Router 방식, params Promise 처리)
+    - [x] 뒤로가기 버튼 (헤더, sticky)
+    - [x] 기본 레이아웃 구조
+    - [x] 동적 메타데이터 생성 (generateMetadata)
+    - [x] 에러 처리 및 404 처리 (notFound)
+  - [x] `app/not-found.tsx` 생성
+    - [x] 404 페이지 UI
+    - [x] 홈으로 돌아가기 버튼
+- [x] 기본 정보 섹션 (MVP 2.4.1)
+  - [x] `components/tour-detail/detail-info.tsx` 생성
+    - [x] `getDetailCommon()` API 연동
+    - [x] 관광지명 (대제목)
+    - [x] 대표 이미지 (크게 표시, Next.js Image 컴포넌트)
+    - [x] 주소 표시 및 복사 기능
+      - [x] 클립보드 API 사용 (navigator.clipboard.writeText)
+      - [x] 복사 완료 토스트
+      - [x] 복사 상태 표시 (Check 아이콘)
+    - [x] 전화번호 (클릭 시 전화 연결, tel: 링크)
+    - [x] 홈페이지 (링크, 새 창 열기)
+    - [x] 개요 (긴 설명문, HTML 렌더링)
+    - [x] 관광 타입 및 카테고리 뱃지
+    - [x] 정보 없는 항목 숨김 처리
+  ***
+  - [ ] 추가 구현 내용 (plan 모드 build로 개발 완료)
+    - [x] 반응형 디자인 (모바일/태블릿/데스크톱)
+    - [x] 접근성 개선 (아이콘, 버튼 aria-label)
+    - [x] 이미지 최적화 (priority, sizes 속성)
 - [ ] 운영 정보 섹션 (MVP 2.4.2)
   - [ ] `components/tour-detail/detail-intro.tsx` 생성
     - [ ] `getDetailIntro()` API 연동
