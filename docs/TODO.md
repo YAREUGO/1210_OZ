@@ -329,17 +329,25 @@
     - [x] 반응형 디자인 (모바일/태블릿/데스크톱)
     - [x] 접근성 개선 (아이콘, 버튼 aria-label)
     - [x] 이미지 최적화 (priority, sizes 속성)
-- [ ] 운영 정보 섹션 (MVP 2.4.2)
-  - [ ] `components/tour-detail/detail-intro.tsx` 생성
-    - [ ] `getDetailIntro()` API 연동
-    - [ ] 운영시간/개장시간
-    - [ ] 휴무일
-    - [ ] 이용요금
-    - [ ] 주차 가능 여부
-    - [ ] 수용인원
-    - [ ] 체험 프로그램
-    - [ ] 유모차/반려동물 동반 가능 여부
-    - [ ] 정보 없는 항목 숨김 처리
+- [x] 운영 정보 섹션 (MVP 2.4.2)
+  - [x] `components/tour-detail/detail-intro.tsx` 생성
+    - [x] `getDetailIntro()` API 연동
+    - [x] 운영시간/개장시간
+    - [x] 휴무일
+    - [x] 이용요금
+    - [x] 주차 가능 여부
+    - [x] 수용인원
+    - [x] 체험 프로그램
+    - [x] 유모차/반려동물 동반 가능 여부
+    - [x] 정보 없는 항목 숨김 처리
+    - [x] contentTypeId별 필드 매핑 처리
+  - [x] 상세페이지에 운영 정보 섹션 통합
+  ***
+  - [ ] 추가 구현 내용 (plan 모드 build로 개발 완료)
+    - [x] 필드 우선순위 정렬
+    - [x] 중복 필드 제거
+    - [x] 아이콘 매핑
+    - [x] 반응형 디자인
 - [ ] 이미지 갤러리 (MVP 2.4.3)
   - [ ] `components/tour-detail/detail-gallery.tsx` 생성
     - [ ] `getDetailImage()` API 연동

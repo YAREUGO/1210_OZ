@@ -131,6 +131,7 @@ export default async function DetailPage({ params }: DetailPageProps) {
         ) : (
           <div className="space-y-8">
             <DetailInfo detail={detail} />
+            {intro && <DetailIntro intro={intro} />}
             <DetailMap detail={detail} />
           </div>
         )}
