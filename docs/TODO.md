@@ -134,7 +134,7 @@
     - [x] ToasterProvider 생성 및 layout.tsx에 추가
     - [x] `lib/utils/toast.ts` - 토스트 유틸리티 함수
   ***
-  - [ ] 추가 구현 내용 (plan 모드 build로 개발 완료)
+  - [x] 추가 구현 내용 (plan 모드 build로 개발 완료)
     - [x] Loading 컴포넌트에 접근성(aria-label) 추가
     - [x] Skeleton 컴포넌트에 다양한 변형 추가 (Card, List, Grid)
     - [x] Error 컴포넌트에 다양한 에러 타입별 컴포넌트 추가
@@ -168,7 +168,7 @@
     - [x] 데이터 파싱 및 표시
     - [x] 에러 처리
   ***
-  - [ ] 추가 구현 내용 (plan 모드 build로 개발 완료)
+  - [x] 추가 구현 내용 (plan 모드 build로 개발 완료)
     - [x] TourCard에 Next.js Image 컴포넌트 사용 (이미지 최적화)
     - [x] 이미지 로드 실패 시 fallback 처리
     - [x] 반응형 이미지 sizes 속성 설정
