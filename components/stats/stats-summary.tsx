@@ -45,15 +45,25 @@ function formatNumber(num: number): string {
 
 /**
  * 날짜를 한국어 형식으로 포맷팅
+ * Date 객체 또는 문자열을 모두 처리 (캐싱으로 인한 직렬화 대응)
  */
-function formatDate(date: Date): string {
+function formatDate(date: Date | string): string {
+  // 문자열인 경우 Date 객체로 변환
+  const dateObj = typeof date === "string" ? new Date(date) : date;
+  
+  // 유효한 Date 객체인지 확인
+  if (!(dateObj instanceof Date) || isNaN(dateObj.getTime())) {
+    console.warn("Invalid date value:", date);
+    return "날짜 정보 없음";
+  }
+  
   return new Intl.DateTimeFormat("ko-KR", {
     year: "numeric",
     month: "long",
     day: "numeric",
     hour: "2-digit",
     minute: "2-digit",
-  }).format(date);
+  }).format(dateObj);
 }
 
 /**
