@@ -243,6 +243,8 @@ NEXT_PUBLIC_STORAGE_BUCKET=uploads
 ### 추가 문서
 - `docs/VERIFICATION_REPORT.md`: 구현 검증 보고서
 - `docs/CLERK_SUPABASE_INTEGRATION.md`: Clerk + Supabase 통합 가이드
+- `docs/VERCEL_DEPLOY.md`: Vercel 배포 가이드
+- `docs/NAVER_MAP_SETUP.md`: 네이버 지도 API 설정 가이드
 
 ---
 
@@ -258,6 +260,8 @@ NEXT_PUBLIC_STORAGE_BUCKET=uploads
 - URL 파라미터: `ncpKeyId` (구 `ncpClientId` 아님)
 - 환경변수: `NEXT_PUBLIC_NAVER_MAP_CLIENT_ID`
 - 월 10,000,000건 무료 (네이버 클라우드 플랫폼)
+- **⚠️ 중요**: 배포 후 반드시 네이버 클라우드 플랫폼에서 웹 서비스 URL 등록 필요
+  - 자세한 설정 방법: `docs/NAVER_MAP_SETUP.md` 참고
 
 ### 3. 좌표 변환
 - 한국관광공사 API는 KATEC 좌표계 사용
@@ -393,17 +397,26 @@ NEXT_PUBLIC_STORAGE_BUCKET=uploads
   - ✅ 북마크 기능
 
 ### 다음 우선 작업
-1. **Phase 4: 통계 대시보드 페이지 (`/stats`)**
-   - `app/stats/page.tsx` 생성
-   - 통계 데이터 수집 및 시각화
-   - 지역별/타입별 차트 구현
+1. **Phase 4: 통계 대시보드 페이지 (`/stats`)** ✅ 완료
+   - `app/stats/page.tsx` 생성 완료
+   - 통계 데이터 수집 및 시각화 완료
+   - 지역별/타입별 차트 구현 완료
 
-2. **Phase 5: 북마크 페이지 (`/bookmarks`)**
-   - `app/bookmarks/page.tsx` 생성
-   - 사용자 북마크 목록 표시
-   - 정렬 및 삭제 기능
+2. **Phase 5: 북마크 페이지 (`/bookmarks`)** ✅ 완료
+   - `app/bookmarks/page.tsx` 생성 완료
+   - 사용자 북마크 목록 표시 완료
+   - 인증된 사용자만 접근 가능
 
 ### 최근 변경사항
+- 2025-12-10: 배포 사이트 에러 수정 및 개선
+  - 북마크 페이지 생성 (`app/bookmarks/page.tsx`) - 404 에러 해결
+  - 전역 에러 바운더리 추가 (`app/error.tsx`) - Server Component 에러 처리
+  - 홈페이지 에러 처리 개선 - 에러 발생 시 빈 배열로 초기화하여 렌더링 오류 방지
+  - 네이버 지도 API 에러 처리 개선 - 스크립트 로드 실패 시 상세한 안내 메시지
+  - 네이버 지도 API 설정 가이드 추가 (`docs/NAVER_MAP_SETUP.md`)
+- 2025-12-10: Phase 4 통계 대시보드 페이지 완료
+  - 통계 요약, 지역별/타입별 차트 구현
+  - 성능 최적화 (캐싱, 동적 임포트)
 - 2025-12-10: Phase 3 상세페이지 구현 완료
   - 기본 정보, 운영 정보, 이미지 갤러리, 지도, 공유, 북마크 기능 모두 완료
 - 2025-12-10: 페이지네이션 구현 완료 (페이지 번호 선택 방식)
@@ -415,5 +428,5 @@ NEXT_PUBLIC_STORAGE_BUCKET=uploads
 ---
 
 **마지막 업데이트**: 2025-12-10  
-**다음 작업**: Phase 4 통계 대시보드 페이지 (`/stats`) 또는 Phase 5 북마크 페이지 (`/bookmarks`)
+**다음 작업**: 배포 사이트 모니터링 및 추가 최적화 (Lighthouse 점수 개선 등)
 
