@@ -230,7 +230,7 @@ cp .env.example .env
 **6-3. Supabase 환경 변수 설정**
 
 1. Supabase Dashboard → **Settings** → **API**
-2. 다음 값들을 복사하여 `.env` 또는 `.env.local` 파일에 입력:
+2. 다음 값들을 복사하여 `.env` 파일에 입력:
    ```env
    NEXT_PUBLIC_SUPABASE_URL="<Project URL>"
    NEXT_PUBLIC_SUPABASE_ANON_KEY="<anon public key>"
@@ -240,7 +240,7 @@ cp .env.example .env
 
 > **⚠️ 주의**: `service_role` 키는 모든 RLS를 우회하는 관리자 권한이므로 절대 공개하지 마세요!
 > 
-> **📝 참고**: Supabase 공식 문서에서는 `.env.local` 파일 사용을 권장합니다. Next.js는 `.env.local` 파일을 자동으로 로드하며, 이 파일은 Git에 커밋되지 않습니다.
+> **📝 참고**: `.env` 파일은 Git에 커밋되지 않으므로, 각 개발자가 프로젝트 루트에 직접 생성해야 합니다.
 
 **6-4. Clerk 환경 변수 설정**
 
