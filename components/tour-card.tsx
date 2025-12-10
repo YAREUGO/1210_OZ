@@ -32,6 +32,14 @@ interface TourCardProps {
    * 추가 클래스명
    */
   className?: string;
+  /**
+   * 선택된 상태 (지도 연동용)
+   */
+  isSelected?: boolean;
+  /**
+   * 카드 클릭 핸들러
+   */
+  onClick?: () => void;
 }
 
 /**
@@ -41,7 +49,12 @@ interface TourCardProps {
 const DEFAULT_IMAGE =
   "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='300'%3E%3Crect fill='%23e5e7eb' width='400' height='300'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='system-ui' font-size='18' fill='%239ca3af'%3E이미지 없음%3C/text%3E%3C/svg%3E";
 
-export function TourCard({ tour, className }: TourCardProps) {
+export function TourCard({
+  tour,
+  className,
+  isSelected = false,
+  onClick,
+}: TourCardProps) {
   const imageUrl = tour.firstimage || tour.firstimage2 || DEFAULT_IMAGE;
   const contentTypeName = getContentTypeName(tour.contenttypeid);
   const detailUrl = `/places/${tour.contentid}`;
@@ -49,8 +62,10 @@ export function TourCard({ tour, className }: TourCardProps) {
   return (
     <Link
       href={detailUrl}
+      onClick={onClick}
       className={cn(
         "group relative flex flex-col overflow-hidden rounded-lg border bg-card shadow-sm transition-all duration-300 hover:scale-[1.02] hover:shadow-lg",
+        isSelected && "ring-2 ring-primary ring-offset-2",
         className
       )}
     >

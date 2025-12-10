@@ -47,6 +47,14 @@ interface TourListProps {
    * 추가 클래스명
    */
   className?: string;
+  /**
+   * 선택된 관광지 ID (지도 연동용)
+   */
+  selectedTourId?: string;
+  /**
+   * 관광지 선택 핸들러
+   */
+  onTourSelect?: (tourId: string) => void;
 }
 
 export function TourList({
@@ -55,6 +63,8 @@ export function TourList({
   error = null,
   onRetry,
   className,
+  selectedTourId,
+  onTourSelect,
 }: TourListProps) {
   // 로딩 상태
   if (isLoading) {
@@ -98,7 +108,12 @@ export function TourList({
       )}
     >
       {tours.map((tour) => (
-        <TourCard key={tour.contentid} tour={tour} />
+        <TourCard
+          key={tour.contentid}
+          tour={tour}
+          isSelected={selectedTourId === tour.contentid}
+          onClick={() => onTourSelect?.(tour.contentid)}
+        />
       ))}
     </div>
   );

@@ -16,7 +16,7 @@
  * - @/lib/api/tour-api: getAreaBasedList, getAreaCode, searchKeyword 함수
  */
 
-import { TourList } from "@/components/tour-list";
+import { TourMapView } from "@/components/tour-map-view";
 import { TourFilters } from "@/components/tour-filters";
 import { getAreaBasedList, getAreaCode, searchKeyword } from "@/lib/api/tour-api";
 import { TourApiError } from "@/lib/api/tour-api";
@@ -108,7 +108,7 @@ export default async function HomePage({ searchParams }: HomePageProps) {
         sortBy={sort as "latest" | "name"}
       />
 
-      {/* 목록 섹션 */}
+      {/* 목록 + 지도 섹션 */}
       <div className="container mx-auto px-4 py-8">
         <div className="mb-6">
           <h1 className="text-3xl font-bold">
@@ -127,7 +127,7 @@ export default async function HomePage({ searchParams }: HomePageProps) {
           </p>
         </div>
 
-        <TourList
+        <TourMapView
           tours={tours}
           isLoading={false}
           error={error}
