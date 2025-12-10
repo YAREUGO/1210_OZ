@@ -37,7 +37,7 @@
     - [ ] `NEXT_PUBLIC_NAVER_MAP_CLIENT_ID` (네이버 지도)
     - [ ] Clerk 인증 키 확인
     - [ ] Supabase 키 확인
-  - [x] `.env.example` 파일 생성
+  - [x] 환경변수 설정 가이드 (PRD.md, AGENTS.md에 문서화 완료)
     - [x] 한국관광공사 API 키 예시
     - [x] 네이버 지도 Client ID 예시
     - [x] Clerk 인증 키 예시
