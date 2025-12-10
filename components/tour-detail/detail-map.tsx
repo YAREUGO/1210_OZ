@@ -107,12 +107,20 @@ export function DetailMap({ detail, height = "400px", className }: DetailMapProp
           원본: { mapx, mapy },
           변환후: { lng, lat },
           관광지: detail.title,
+          주소: detail.addr1,
         });
 
         // 좌표 유효성 검증 (한국 좌표 범위: 경도 124-132, 위도 33-43)
         if (lng < 124 || lng > 132 || lat < 33 || lat > 43) {
-          console.error("좌표가 한국 범위를 벗어남:", { lng, lat });
-          setMapError("좌표가 유효하지 않습니다");
+          console.error("좌표가 한국 범위를 벗어남:", { lng, lat, 원본: { mapx, mapy } });
+          setMapError(`좌표가 유효하지 않습니다 (경도: ${lng.toFixed(6)}, 위도: ${lat.toFixed(6)})`);
+          return;
+        }
+
+        // 좌표가 0에 가까운지 확인 (변환 실패 가능성)
+        if (Math.abs(lng) < 0.001 || Math.abs(lat) < 0.001) {
+          console.error("좌표가 0에 가까움 (변환 실패 가능성):", { lng, lat, 원본: { mapx, mapy } });
+          setMapError("좌표 변환에 실패했습니다");
           return;
         }
 
