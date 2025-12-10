@@ -31,5 +31,18 @@
   - [npm package-lock.json 문서](https://docs.npmjs.com/cli/v9/configuring-npm/package-lock-json)
   - pnpm 프로젝트에서는 pnpm-lock.yaml만 사용해야 함
 
+### 네이버 지도 API 환경변수 검증 추가
+- **발생 시점**: 네이버 지도 컴포넌트 구현 중
+- **에러 내용**: 환경변수가 없을 때 API 스크립트 로드 실패 가능성
+- **원인**: 
+  - `NEXT_PUBLIC_NAVER_MAP_CLIENT_ID`가 설정되지 않았을 때 스크립트 로드 시도
+  - 빈 문자열로 API 호출 시 에러 발생 가능
+- **해결 방법**:
+  - 스크립트 로드 전 환경변수 검증 추가
+  - 환경변수가 없으면 경고 메시지 출력 후 early return
+- **참고 자료**: 
+  - Naver Maps API v3 (NCP) 문서
+  - URL 파라미터: `ncpKeyId` 사용 (구 `ncpClientId` 아님)
+
 ---
 
