@@ -20,6 +20,7 @@ import Link from "next/link";
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { Home, BarChart3, Bookmark } from "lucide-react";
+import { TourSearch } from "@/components/tour-search";
 
 const Navbar = () => {
   return (
@@ -59,9 +60,9 @@ const Navbar = () => {
 
         {/* 검색창 및 인증 버튼 */}
         <div className="flex items-center gap-4">
-          {/* 검색창 (향후 구현 예정) */}
+          {/* 검색창 */}
           <div className="hidden lg:block">
-            {/* 검색창 컴포넌트는 Phase 2에서 구현 예정 */}
+            <TourSearch variant="navbar" />
           </div>
 
           {/* 로그인/회원가입 버튼 */}
