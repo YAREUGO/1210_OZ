@@ -78,7 +78,7 @@ export function DetailMap({ detail, height = "400px", className }: DetailMapProp
         // 좌표 변환 (KATEC → WGS84)
         const mapx = parseFloat(detail.mapx) / 10000000;
         const mapy = parseFloat(detail.mapy) / 10000000;
-        const [lng, lat] = katecToWgs84(mapx, mapy);
+        const { lng, lat } = katecToWgs84(mapx, mapy);
 
         // 지도 초기화
         const map = new window.naver.maps.Map(mapRef.current, {
@@ -133,7 +133,7 @@ export function DetailMap({ detail, height = "400px", className }: DetailMapProp
   const handleDirections = () => {
     const mapx = parseFloat(detail.mapx) / 10000000;
     const mapy = parseFloat(detail.mapy) / 10000000;
-    const [lng, lat] = katecToWgs84(mapx, mapy);
+    const { lng, lat } = katecToWgs84(mapx, mapy);
 
     // 네이버 지도 길찾기 URL
     const directionsUrl = `https://map.naver.com/v5/directions/${lng},${lat}`;
