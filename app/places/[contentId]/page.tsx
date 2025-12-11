@@ -53,12 +53,31 @@ const DetailMap = dynamic(
 );
 
 // Pet tour info component (dynamic import)
+// DetailPetTour는 이미 "use client"로 되어 있어 클라이언트에서만 렌더링됨
 const DetailPetTour = dynamic(
   () =>
     import("@/components/tour-detail/detail-pet-tour").then(
       (mod) => mod.DetailPetTour,
     ),
-  { ssr: false },
+  {
+    loading: () => (
+      <div className="border-t pt-6">
+        <div className="space-y-4 animate-pulse">
+          <div className="flex items-center gap-2">
+            <div className="h-6 w-6 bg-muted rounded" />
+            <div className="h-6 w-32 bg-muted rounded" />
+          </div>
+          <div className="h-8 w-48 bg-muted rounded-full" />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            {[1, 2, 3, 4].map((i) => (
+              <div key={i} className="h-20 bg-muted rounded-lg" />
+            ))}
+          </div>
+        </div>
+      </div>
+    ),
+    ssr: true, // Server Component에서는 ssr: true 필수 (컴포넌트 내부에서 클라이언트 렌더링)
+  },
 );
 
 interface DetailPageProps {
