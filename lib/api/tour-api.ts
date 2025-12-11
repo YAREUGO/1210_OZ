@@ -102,22 +102,42 @@ export class TourApiNotFoundError extends TourApiError {
 
 /**
  * API 키를 환경변수에서 가져옵니다.
- * NEXT_PUBLIC_TOUR_API_KEY를 우선 사용하고, 없으면 TOUR_API_KEY를 사용합니다.
+ * 
+ * 우선순위:
+ * 1. TOUR_API_KEY (서버 전용, 보안상 권장)
+ * 2. NEXT_PUBLIC_TOUR_API_KEY (클라이언트 노출, 호환성 유지)
+ * 
+ * @throws {TourApiError} 환경 변수가 설정되지 않은 경우
  */
 function getApiKey(): string {
-  const publicKey = process.env.NEXT_PUBLIC_TOUR_API_KEY;
-  const serverKey = process.env.TOUR_API_KEY;
+  // 서버 전용 API 키 우선 사용 (보안상 권장)
+  const serverKey = process.env.TOUR_API_KEY?.trim();
+  // 클라이언트 노출 가능한 API 키 (호환성 유지)
+  const publicKey = process.env.NEXT_PUBLIC_TOUR_API_KEY?.trim();
 
-  if (publicKey) {
-    return publicKey;
-  }
-
-  if (serverKey) {
+  // 서버 전용 키가 있으면 우선 사용
+  if (serverKey && serverKey.length > 0) {
     return serverKey;
   }
 
+  // 클라이언트 노출 키 사용 (호환성)
+  if (publicKey && publicKey.length > 0) {
+    return publicKey;
+  }
+
+  // 환경 변수 확인 로깅 (디버깅용)
+  const hasServerKey = !!process.env.TOUR_API_KEY;
+  const hasPublicKey = !!process.env.NEXT_PUBLIC_TOUR_API_KEY;
+  
+  console.error("[TourAPI] API 키 환경 변수 확인:", {
+    hasTOUR_API_KEY: hasServerKey,
+    hasNEXT_PUBLIC_TOUR_API_KEY: hasPublicKey,
+    nodeEnv: process.env.NODE_ENV,
+    vercelEnv: process.env.VERCEL_ENV,
+  });
+
   throw new TourApiError(
-    "API 키가 설정되지 않았습니다. NEXT_PUBLIC_TOUR_API_KEY 또는 TOUR_API_KEY 환경변수를 설정해주세요."
+    "API 키가 설정되지 않았습니다. Vercel 환경 변수에 TOUR_API_KEY 또는 NEXT_PUBLIC_TOUR_API_KEY를 설정해주세요."
   );
 }
 
@@ -156,6 +176,30 @@ async function fetchWithRetry(
       }
       if (response.status === 429) {
         throw new TourApiRateLimitError();
+      }
+      // 401 Unauthorized 에러는 API 키 문제일 가능성이 높음
+      if (response.status === 401) {
+        const serverKey = process.env.TOUR_API_KEY?.trim();
+        const publicKey = process.env.NEXT_PUBLIC_TOUR_API_KEY?.trim();
+        const apiKeyInUse = serverKey || publicKey;
+        const apiKeyPreview = apiKeyInUse ? `${apiKeyInUse.substring(0, 8)}...` : "없음";
+        
+        console.error("[TourAPI] 401 Unauthorized 에러 발생:", {
+          status: response.status,
+          statusText: response.statusText,
+          apiKeyLength: apiKeyInUse?.length || 0,
+          apiKeyPreview,
+          hasTOUR_API_KEY: !!process.env.TOUR_API_KEY,
+          hasNEXT_PUBLIC_TOUR_API_KEY: !!process.env.NEXT_PUBLIC_TOUR_API_KEY,
+          nodeEnv: process.env.NODE_ENV,
+          vercelEnv: process.env.VERCEL_ENV,
+          url: url.substring(0, 100), // URL 일부만 로깅
+        });
+        throw new TourApiError(
+          `API 인증 실패 (401): API 키가 잘못되었거나 만료되었습니다. Vercel 환경 변수(TOUR_API_KEY 또는 NEXT_PUBLIC_TOUR_API_KEY)를 확인해주세요.`,
+          response.status,
+          { apiKeyPreview }
+        );
       }
       throw new TourApiError(
         `API 요청 실패: ${response.status} ${response.statusText}`,

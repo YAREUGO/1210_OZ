@@ -67,14 +67,29 @@ NEXT_PUBLIC_STORAGE_BUCKET=uploads
 
 #### 한국관광공사 API 관련
 
+**⚠️ 중요**: 서버 전용 API 키 사용을 권장합니다 (보안상 더 안전).
+
 ```env
+# 서버 전용 API 키 (권장)
+TOUR_API_KEY=your-tour-api-key
+
+# 또는 클라이언트 노출 가능한 API 키 (호환성 유지)
 NEXT_PUBLIC_TOUR_API_KEY=your-tour-api-key
 ```
+
+**우선순위:**
+1. `TOUR_API_KEY` (서버 전용, 보안상 권장) - 우선 사용
+2. `NEXT_PUBLIC_TOUR_API_KEY` (클라이언트 노출) - 호환성 유지
 
 **값 확인 위치:**
 
 - [한국관광공사 공공데이터포털](https://www.data.go.kr/)
 - 회원가입 후 API 키 발급
+
+**401 Unauthorized 에러 발생 시:**
+- Vercel 환경 변수에 `TOUR_API_KEY` 또는 `NEXT_PUBLIC_TOUR_API_KEY`가 올바르게 설정되었는지 확인
+- API 키가 만료되지 않았는지 확인
+- 빌드 로그에서 환경 변수 로딩 상태 확인
 
 #### 네이버 지도 API 관련
 
